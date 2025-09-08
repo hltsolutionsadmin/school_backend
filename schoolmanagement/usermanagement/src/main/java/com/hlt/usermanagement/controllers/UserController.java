@@ -119,6 +119,8 @@ public class UserController {
         return StandardResponse.single("User fetched successfully", loggedInUser);
     }
 
+    // Todo : Enable after setting up Azure account
+
 //    @SuppressWarnings("unchecked")
 //    @PostMapping("/profile/upload")
 //    public ResponseEntity<MediaDTO> uploadCustomerProfilePicture(@ModelAttribute MultipartFile profilePicture)

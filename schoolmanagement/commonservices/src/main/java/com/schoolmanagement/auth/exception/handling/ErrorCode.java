@@ -11,30 +11,36 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS(1001, "User Already Exists", HttpStatus.CONFLICT),
     EMAIL_ALREADY_IN_USE(1002, "Email Is Already In Use", HttpStatus.CONFLICT),
     UNAUTHORIZED(1003, "Unauthorized Access", HttpStatus.UNAUTHORIZED),
-    UNSUPPORTED_MAPPING_TYPE(1021, "Unsupported mapping type for the given role", HttpStatus.BAD_REQUEST),
-    MAPPING_ALREADY_DEACTIVATED(1002, "User mapping is already deactivated", HttpStatus.UNPROCESSABLE_ENTITY),
-    BUSINESS_NOT_FOUND(1002, "Business not found", HttpStatus.NOT_FOUND),
-    BUSINESS_CODE_ALREADY_EXISTS(1003, "Business code already exists", HttpStatus.CONFLICT),
-    MAPPING_NOT_FOUND(1003, "Mapping not found", HttpStatus.NOT_FOUND),
-    TELECALLER_MAPPING_LIMIT_EXCEEDED(1005, "Telecaller cannot be mapped to more than 2 hospitals", HttpStatus.CONFLICT),
     INVALID_ROLE(1007, "Invalid role provided", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_OPERATION(1016, "Unauthorized operation", HttpStatus.UNAUTHORIZED),
     PROFILE_INCOMPLETE(1010, "Student profile not completed. Please complete your profile before applying.", HttpStatus.BAD_REQUEST),
     INVALID_ROLE_FOR_OPERATION(1017, "Invalid role for this operation", HttpStatus.FORBIDDEN),
-    HOSPITAL_ADMIN_ALREADY_EXISTS(2001, "A hospital admin already exists for this hospital", HttpStatus.CONFLICT),
-    REQUIREMENT_NOT_FOUND(2001, "Requirement not found", HttpStatus.NOT_FOUND),
-    REQUIREMENT_ALREADY_EXISTS(2002, "Requirement already exists", HttpStatus.CONFLICT),
-    REQUIREMENT_INVALID_DATA(2003, "Invalid requirement data", HttpStatus.BAD_REQUEST),
-    REWARD_NOT_FOUND(3000, "User reward balance not found", HttpStatus.NOT_FOUND),
-    INSUFFICIENT_POINTS(3001, "Not enough reward points available", HttpStatus.BAD_REQUEST),
-    UNAUTHORIZED_ROLE_ASSIGNMENT(1006, "You are not allowed to assign this role", HttpStatus.FORBIDDEN),
-    INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
-    APPLICATION_NOT_FOUND(3001, "Application not found", HttpStatus.NOT_FOUND),
-    APPLICATION_ALREADY_EXISTS(3002, "Application already exists for this requirement and applicant", HttpStatus.CONFLICT),
-    APPLICATION_INVALID_STATUS(3003, "Invalid application status", HttpStatus.BAD_REQUEST),
-    APPLICATION_UNAUTHORIZED_ACCESS(3004, "You are not authorized to access this application", HttpStatus.FORBIDDEN),
-    BUSINESS_ALREADY_APPROVED(2003, "Business already approved", HttpStatus.BAD_REQUEST),
-    PROFILE_NOT_COMPLETED(1010, "Profile must be completed to perform this action", HttpStatus.FORBIDDEN),
+    SCHOOL_NOT_FOUND(2001, "School not found", HttpStatus.NOT_FOUND),
+    SCHOOL_ALREADY_EXISTS(2002, "School already exists", HttpStatus.BAD_REQUEST),
+    SCHOOL_CODE_ALREADY_IN_USE(2003, "School code already in use", HttpStatus.BAD_REQUEST),
+
+    // Class related errors
+    CLASS_NOT_FOUND(3001, "Class not found", HttpStatus.NOT_FOUND),
+    CLASS_ALREADY_EXISTS(3002, "Class already exists", HttpStatus.BAD_REQUEST),
+
+    // Student related errors
+    STUDENT_NOT_FOUND(4001, "Student not found", HttpStatus.NOT_FOUND),
+    STUDENT_ALREADY_EXISTS(4002, "Student already exists", HttpStatus.BAD_REQUEST),
+
+    // Teacher related errors
+    TEACHER_NOT_FOUND(5001, "Teacher not found", HttpStatus.NOT_FOUND),
+    TEACHER_ALREADY_EXISTS(5002, "Teacher already exists", HttpStatus.BAD_REQUEST),
+
+    // Subject related errors
+    SUBJECT_NOT_FOUND(6001, "Subject not found", HttpStatus.NOT_FOUND),
+    SUBJECT_ALREADY_EXISTS(6002, "Subject already exists", HttpStatus.BAD_REQUEST),
+
+    // Parent/Guardian
+    PARENT_NOT_FOUND(7001, "Parent not found", HttpStatus.NOT_FOUND),
+
+    // Staff related errors
+    STAFF_NOT_FOUND(8001, "Staff not found", HttpStatus.NOT_FOUND),
+    STAFF_ALREADY_EXISTS(8002, "Staff already exists", HttpStatus.BAD_REQUEST),
     // ===========================
     // OTP & Token (1800–1899)
     // ===========================

@@ -42,6 +42,10 @@ public class SchoolModel extends AuditableModel {
     @Column(name = "EMAIL")
     private String email;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRINCIPAL_ID")
+    private UserModel principal;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
     private AddressModel address;

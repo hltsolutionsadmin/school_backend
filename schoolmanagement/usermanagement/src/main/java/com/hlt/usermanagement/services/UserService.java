@@ -25,7 +25,7 @@ public interface UserService {
 
     void updateUser(final UserUpdateDTO details, final Long userId);
 
-    Long onBoardUser(final String fullName, final String mobileNumber, final Set<ERole> userRoles, Long b2bUnitId);
+    Long onBoardUser(final String fullName, final String mobileNumber, final Set<ERole> userRoles, Long schoolId);
 
     void addUserRole(final Long userId, final ERole userRole);
 

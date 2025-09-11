@@ -2,14 +2,17 @@ package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.dto.SchoolDTO;
 import com.hlt.usermanagement.model.AddressModel;
+import com.hlt.usermanagement.model.RoleModel;
 import com.hlt.usermanagement.model.SchoolModel;
 import com.hlt.usermanagement.model.UserModel;
 import com.hlt.usermanagement.populator.SchoolPopulator;
+import com.hlt.usermanagement.repository.RoleRepository;
 import com.hlt.usermanagement.repository.SchoolRepository;
 import com.hlt.usermanagement.repository.UserRepository;
 import com.hlt.usermanagement.services.SchoolService;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
 import com.schoolmanagement.auth.exception.handling.HltCustomerException;
+import com.schoolmanagement.commonservice.enums.ERole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +31,7 @@ public class SchoolServiceImpl implements SchoolService {
     private final UserRepository userRepository;
     private final SchoolRepository schoolRepository;
     private final SchoolPopulator schoolPopulator;
+    private final RoleRepository eRoleRepository;
 
     @Override
     @Transactional
@@ -37,10 +42,14 @@ public class SchoolServiceImpl implements SchoolService {
         }
         SchoolModel school = new SchoolModel();
 
-        if (schoolDTO.getPrincipalId() != null) {
-            UserModel principal = userRepository.findById(schoolDTO.getPrincipalId())
+        if (schoolDTO.getAdminId() != null) {
+            UserModel principal = userRepository.findById(schoolDTO.getAdminId())
                     .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND));
-            school.setPrincipal(principal);
+            principal.setSchool(school);
+            RoleModel adminRole = eRoleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new HltCustomerException(ErrorCode.ROLE_NOT_FOUND));
+            principal.setRoles(Set.of(adminRole));
+            school.setAdmin(principal);
         }
         mapSchoolDtoToModel(schoolDTO, school);
         SchoolModel savedSchool = schoolRepository.save(school);

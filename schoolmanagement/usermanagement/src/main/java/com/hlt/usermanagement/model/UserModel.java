@@ -1,6 +1,5 @@
 package com.hlt.usermanagement.model;
 
-
 import com.hlt.usermanagement.utils.EncryptedStringConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -89,5 +88,4 @@ public class UserModel extends AuditableModel {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressModel> addresses = new ArrayList<>();
-
 }

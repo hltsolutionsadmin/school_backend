@@ -8,6 +8,7 @@ import com.schoolmanagement.commonservice.dto.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -24,8 +25,14 @@ public class SchoolController {
     /**
      * Create a new school
      */
+    /**
+     * API for creating a new school.
+     * Only accessible by ADMIN role.
+     */
     @PostMapping("/create")
-    public ResponseEntity<StandardResponse<SchoolDTO>> createSchool(@Valid @RequestBody SchoolDTO schoolDTO) {
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<StandardResponse<SchoolDTO>> createSchool(
+            @Valid @RequestBody SchoolDTO schoolDTO) {
         log.info("Request received to create school: {}", schoolDTO.getName());
 
         SchoolDTO savedSchoolDTO = schoolService.saveSchool(schoolDTO);

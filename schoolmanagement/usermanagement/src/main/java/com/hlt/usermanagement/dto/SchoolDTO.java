@@ -27,9 +27,9 @@ public class SchoolDTO {
     @Size(max = 50, message = "Email cannot exceed 50 characters")
     private String email;
 
-    private Long principalId;
+    private Long adminId;
 
-    private String principalName;
+    private String adminName;
 
     private AddressDTO address;
 }

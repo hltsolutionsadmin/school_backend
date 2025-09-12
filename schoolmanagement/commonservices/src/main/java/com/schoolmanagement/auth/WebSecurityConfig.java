@@ -55,7 +55,8 @@ public class WebSecurityConfig {
                                 "/jtprofile/admin/**",
                                 "/api/public/**",
                                 "/api/product/public/products/**",
-                                "/api/usermgmt/api/public/**"
+                                "/api/usermgmt/api/public/**",
+                                "/actuator/**"
 
                         ).permitAll()
 

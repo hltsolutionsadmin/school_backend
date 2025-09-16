@@ -22,9 +22,7 @@ public class SchoolController {
 
     private final SchoolService schoolService;
 
-    /**
-     * Create a new school
-     */
+
     /**
      * API for creating a new school.
      * Only accessible by ADMIN role.

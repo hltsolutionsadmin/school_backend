@@ -33,7 +33,6 @@ public class LoggedInUser {
 
     private Long businessId;
 
-
-
+   private Long schoolId;
 
 }

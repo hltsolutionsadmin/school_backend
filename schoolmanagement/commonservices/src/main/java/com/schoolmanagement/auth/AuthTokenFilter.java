@@ -59,8 +59,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                             loggedInUser.getPrimaryContact(),
                             loggedInUser.getEmail(),
                             loggedInUser.getPassword(),
+                            loggedInUser.getSchoolId(),
                             authorities
+
                     );
+
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()

@@ -57,23 +57,23 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
     }
 
 
-    @Override
-    public Long onBoardUserWithCredentials(BasicOnboardUserDTO dto) {
-        if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new HltCustomerException(ErrorCode.USER_ALREADY_EXISTS);
-        }
-
-        UserModel user = new UserModel();
-        user.setUsername(dto.getUsername());
-        user.setFullName(dto.getFullName());
-        user.setPrimaryContact(dto.getPrimaryContact());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRoles(fetchRoles(dto.getUserRoles()));
-        user.setSchool(fetchSchoolById(dto.getSchoolId()));
-
-        return saveUser(user).getId();
-    }
+//    @Override
+//    public Long onBoardUserWithCredentials(BasicOnboardUserDTO dto) {
+//        if (userRepository.existsByUsername(dto.getUsername())) {
+//            throw new HltCustomerException(ErrorCode.USER_ALREADY_EXISTS);
+//        }
+//
+//        UserModel user = new UserModel();
+//        user.setUsername(dto.getUsername());
+//        user.setFullName(dto.getFullName());
+//        user.setPrimaryContact(dto.getPrimaryContact());
+//        user.setEmail(dto.getEmail());
+//        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        user.setRoles(fetchRoles(dto.getUserRoles()));
+//        user.setSchool(fetchSchoolById(dto.getSchoolId()));
+//
+//        return saveUser(user).getId();
+//    }
 
     @Override
     public void updateUser(UserUpdateDTO details, Long userId) {
@@ -93,22 +93,153 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
         saveUser(user);
     }
 
+
+    // Add imports at top if missing
+
+
+    // --- helper: validate permissions ---
+    private void validateOnboardingPermissions(UserDetailsImpl currentUser,
+                                               Set<ERole> requestedRoles,
+                                               Long requestedSchoolId,
+                                               boolean credentialsFlow) {
+        // Must be authenticated
+        if (currentUser == null) {
+            throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+        }
+
+        // requestedRoles must be provided
+        if (requestedRoles == null || requestedRoles.isEmpty()) {
+            throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+        }
+
+        // If requested roles contain PRINCIPAL -> only SUPER_ADMIN can create
+        if (requestedRoles.contains(ERole.ROLE_PARENT) && !currentUser.hasRole(ERole.ROLE_SUPER_ADMIN)) {
+            throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+        }
+
+        // If caller is PRINCIPAL -> they may create only this subset
+        if (currentUser.hasRole(ERole.ROLE_PARENT)) {
+            Set<ERole> allowed = Set.of(ERole.ROLE_TEACHER, ERole.ROLE_STAFF, ERole.ROLE_PARENT, ERole.ROLE_STUDENT);
+            boolean allAllowed = requestedRoles.stream().allMatch(allowed::contains);
+            if (!allAllowed) {
+                throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+            }
+            // Principals cannot create users for other schools
+            if (requestedSchoolId != null && !Objects.equals(requestedSchoolId, currentUser.getSchoolId())) {
+                throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+            }
+
+        }
+
+
+        // If caller is neither SUPER_ADMIN nor PRINCIPAL -> unauthorized
+        if (!currentUser.hasRole(ERole.ROLE_SUPER_ADMIN) && !currentUser.hasRole(ERole.ROLE_PRINCIPAL)) {
+            throw new HltCustomerException(ErrorCode.UNAUTHORIZED);
+        }
+
+        // Optional: credentialsFlow could enforce username/password present, but controller already passes them.
+    }
+
+    // --- onBoardUserWithCredentials: transactional, permission-checked ---
     @Override
+    @Transactional
+    public Long onBoardUserWithCredentials(BasicOnboardUserDTO dto) {
+        // 1. Get caller
+        UserDetailsImpl currentUser = SecurityUtils.getCurrentUserDetails();
+
+        // 2. Validate permissions: who is calling and which roles requested
+        validateOnboardingPermissions(currentUser, dto.getUserRoles(), dto.getSchoolId(), true);
+
+        // 3. If user already exists by primary contact -> return existing ID
+        Optional<UserModel> existingByContact = findByPrimaryContact(dto.getPrimaryContact());
+        if (existingByContact.isPresent()) {
+
+            return existingByContact.get().getId();
+        }
+
+        // 4. Prevent duplicate username
+        if (dto.getUsername() != null && userRepository.existsByUsername(dto.getUsername())) {
+            throw new HltCustomerException(ErrorCode.USER_ALREADY_EXISTS);
+        }
+
+
+        // 5. Build user model
+        UserModel user = new UserModel();
+        user.setUsername(dto.getUsername());
+        user.setFullName(dto.getFullName());
+        user.setPrimaryContact(dto.getPrimaryContact());
+        user.setEmail(dto.getEmail());
+
+        // Password must be encoded
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        // Roles -> RoleModel set
+        user.setRoles(fetchRoles(dto.getUserRoles()));
+
+        // Set school: if principal is creating, enforce principal's school. Otherwise use provided schoolId
+        if (currentUser.hasRole(ERole.ROLE_PRINCIPAL)) {
+            user.setSchool(fetchSchoolById(currentUser.getSchoolId()));
+        } else {
+            user.setSchool(fetchSchoolById(dto.getSchoolId()));
+        }
+
+        // Optional: set audit fields (creator)
+        // user.setCreatedBy(currentUser.getId());
+
+        // 6. Persist and return id
+        return saveUser(user).getId();
+    }
+
+    // --- onBoardUser (no credentials) ---
+    @Override
+    @Transactional
     public Long onBoardUser(String fullName, String mobileNumber, Set<ERole> userRoles, Long schoolId) {
+        UserDetailsImpl currentUser = SecurityUtils.getCurrentUserDetails();
+
+        // Validate permissions
+        validateOnboardingPermissions(currentUser, userRoles, schoolId, false);
+
+        // If already exists by contact -> return existing
         Optional<UserModel> existingUserOpt = findByPrimaryContact(mobileNumber);
         if (existingUserOpt.isPresent()) {
             return existingUserOpt.get().getId();
         }
 
 
+        // Build user without credentials
         UserModel user = new UserModel();
         user.setPrimaryContact(mobileNumber);
         user.setRoles(fetchRoles(userRoles));
         user.setFullName(fullName);
-         user.setSchool(fetchSchoolById(schoolId));
 
+        // If principal creating -> use principal's school; else use provided schoolId
+        if (currentUser.hasRole(ERole.ROLE_PRINCIPAL)) {
+            user.setSchool(fetchSchoolById(currentUser.getSchoolId()));
+        } else {
+            user.setSchool(fetchSchoolById(schoolId));
+        }
+
+
+        // Persist and return
         return saveUser(user).getId();
     }
+
+//    @Override
+//    public Long onBoardUser(String fullName, String mobileNumber, Set<ERole> userRoles, Long schoolId) {
+//        Optional<UserModel> existingUserOpt = findByPrimaryContact(mobileNumber);
+//        if (existingUserOpt.isPresent()) {
+//            return existingUserOpt.get().getId();
+//        }
+//
+//
+//        UserModel user = new UserModel();
+//        user.setPrimaryContact(mobileNumber);
+//        user.setRoles(fetchRoles(userRoles));
+//        user.setFullName(fullName);
+//         user.setSchool(fetchSchoolById(schoolId));
+//
+//        return saveUser(user).getId();
+//    }
 
     private SchoolModel fetchSchoolById(Long schoolId) {
         return schoolRepository.findById(schoolId)

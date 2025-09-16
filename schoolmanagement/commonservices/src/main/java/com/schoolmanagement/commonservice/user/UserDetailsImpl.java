@@ -3,6 +3,7 @@ package com.schoolmanagement.commonservice.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.schoolmanagement.commonservice.dto.LoggedInUser;
 
+import com.schoolmanagement.commonservice.enums.ERole;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,23 +27,39 @@ public class UserDetailsImpl implements UserDetails {
 
     private String primaryContact;
 
+    private Long schoolId;
+
+
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String primaryContact, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+public UserDetailsImpl(Long id, String primaryContact, String email, String password, Long schoolId,
+
+                       Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.primaryContact = primaryContact;
         this.email = email;
         this.password = password;
+        this.schoolId = schoolId;
         this.authorities = authorities;
     }
+
 
     public static UserDetailsImpl build(LoggedInUser user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(user.getId(), user.getPrimaryContact(), user.getEmail(), user.getPassword(),
-                authorities);
+
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getPrimaryContact(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getSchoolId(),
+                authorities
+        );
+
+
     }
 
     @Override
@@ -105,5 +122,21 @@ public class UserDetailsImpl implements UserDetails {
     public void setPrimaryContact(String primaryContact) {
         this.primaryContact = primaryContact;
     }
+
+
+    public boolean hasRole(ERole eRole) {
+        if (authorities == null) {
+            return false;
+        }
+        return authorities.stream()
+                .anyMatch(auth -> auth.getAuthority().equals(eRole.name()));
+    }
+
+    public Long getSchoolId() {
+        return schoolId;
+    }
+
+
+
 
 }

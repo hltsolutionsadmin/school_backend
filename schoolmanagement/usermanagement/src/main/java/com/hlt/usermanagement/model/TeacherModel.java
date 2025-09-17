@@ -26,4 +26,10 @@ public class TeacherModel extends GenericModel {
 
     @OneToOne(mappedBy = "classTeacher")
     private ClassModel classInCharge;
+
+    @Column(name = "PRIMARY_CONTACT", length = 20)
+    private String primaryContact;
+
+    @Column(name = "QUALIFICATION", length = 100)
+    private String qualification;
 }

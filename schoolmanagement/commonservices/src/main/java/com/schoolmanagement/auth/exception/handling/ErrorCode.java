@@ -68,7 +68,8 @@ public enum ErrorCode {
     // ===========================
     CATEGORY_NOT_FOUND(3001, "Category not found", HttpStatus.NOT_FOUND),
     ALREADY_EXISTS(3003, "Resource already exists", HttpStatus.CONFLICT),
-    ROLE_NOT_FOUND(3004, "Role not found", HttpStatus.CONFLICT);
+    ROLE_NOT_FOUND(3004, "Role not found", HttpStatus.CONFLICT),
+    DUPLICATE_TEACHER_FOR_USER(3005, "Duplicate teacher for user", HttpStatus.CONFLICT);
 
     // ===========================
     // Fields

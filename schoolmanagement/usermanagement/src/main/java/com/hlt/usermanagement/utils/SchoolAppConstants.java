@@ -12,6 +12,12 @@ public final class SchoolAppConstants {
     public static final String SCHOOL_UPDATE_SUCCESS = "School updated successfully";
     public static final String SCHOOL_DELETE_SUCCESS = "School deleted successfully";
 
+    public static final String CLASS_CREATE_SUCCESS = "class created successfully";
+    public static final String CLASS_UPDATE_SUCCESS = "class updated successfully";
+    public static final String CLASS_FETCH_SUCCESS = "class fetched successfully";
+    public static final String CLASS_DELETE_SUCCESS = "class deleted successfully";
+    public static final String STUDENT_FETCH_SUCCESS = "student fetch successfully";
+    public static final String SUBJECT_FETCH_SUCCESS = "subject fetch successfully";
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

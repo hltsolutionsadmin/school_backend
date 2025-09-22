@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "STUDENT")
@@ -32,4 +33,10 @@ public class StudentModel extends GenericModel {
 
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active = Boolean.TRUE;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GradeModel> grades;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AttendanceModel> attendanceRecords;
 }

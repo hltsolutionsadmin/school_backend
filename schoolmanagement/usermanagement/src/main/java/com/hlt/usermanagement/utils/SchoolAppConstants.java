@@ -19,6 +19,14 @@ public final class SchoolAppConstants {
     public static final String STUDENT_FETCH_SUCCESS = "student fetch successfully";
     public static final String SUBJECT_FETCH_SUCCESS = "subject fetch successfully";
 
+    public static final String STUDENT_CREATE_SUCCESS = "Student created successfully";
+    public static final String STUDENT_UPDATE_SUCCESS = "Student updated successfully";
+    public static final String STUDENT_DELETE_SUCCESS = "Student deleted successfully";
+    public static final String STUDENT_ENROLL_SUCCESS = "Student enrolled successfully";
+    public static final String STUDENT_FETCH_GRADES_SUCCESS = "Student grades fetched successfully";
+    public static final String STUDENT_FETCH_ATTENDANCE_SUCCESS = "Student attendance fetched successfully";
+
+
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";
     public static final String NOT_FOUND = "Requested resource not found";

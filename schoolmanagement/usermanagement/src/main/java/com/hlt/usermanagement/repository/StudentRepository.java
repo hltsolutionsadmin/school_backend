@@ -12,4 +12,6 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<StudentModel, Long> {
     Page<StudentModel> findByClassModelId(Long classId, Pageable pageable);
     List<StudentModel> findBySchoolId(Long schoolId);
+    boolean existsByRollNumber(String rollNumber);
+
 }

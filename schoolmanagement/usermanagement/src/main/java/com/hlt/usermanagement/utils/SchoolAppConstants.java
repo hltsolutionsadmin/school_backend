@@ -26,6 +26,13 @@ public final class SchoolAppConstants {
     public static final String STUDENT_FETCH_GRADES_SUCCESS = "Student grades fetched successfully";
     public static final String STUDENT_FETCH_ATTENDANCE_SUCCESS = "Student attendance fetched successfully";
 
+    public static final String TEACHER_SUBJECTS_FETCH_SUCCESS = "teacher subjects fetch successfully";
+    public static final String TEACHER_CLASSES_FETCH_SUCCESS = "teacher classes fetch successfully";
+    public static final String TEACHER_DELETE_SUCCESS = "teacher deleted successfully";
+    public static final String TEACHER_FETCH_SUCCESS = "teacher fetched successfully";
+    public static final String TEACHER_UPDATE_SUCCESS = "teacher updated successfully";
+    public static final String TEACHER_CREATE_SUCCESS = "teacher created successfully";
+
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

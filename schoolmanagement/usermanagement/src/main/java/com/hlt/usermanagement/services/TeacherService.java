@@ -1,14 +1,22 @@
 package com.hlt.usermanagement.services;
 
+import com.hlt.usermanagement.dto.ClassDTO;
+import com.hlt.usermanagement.dto.SubjectDTO;
 import com.hlt.usermanagement.dto.TeacherDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TeacherService {
 
-    /**
-     * Creates a new teacher entity from the provided DTO.
-     *
-     * @param dto The TeacherDTO containing the data for the new teacher.
-     * @return The created TeacherDTO with the assigned ID and other details.
-     */
     TeacherDTO createTeacher(TeacherDTO dto);
+
+    TeacherDTO updateTeacher(Long teacherId, TeacherDTO dto);
+
+    TeacherDTO getTeacherById(Long teacherId);
+
+    void deleteTeacher(Long teacherId);
+
+    Page<ClassDTO> getClassesAssignedToTeacher(Long teacherId, Pageable pageable);
+
+    Page<SubjectDTO> getSubjectsTaughtByTeacher(Long teacherId, Pageable pageable);
 }

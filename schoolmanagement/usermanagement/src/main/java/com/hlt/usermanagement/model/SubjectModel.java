@@ -11,7 +11,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class SubjectModel extends GenericModel {
-
     @Column(name = "NAME", nullable = false)
     private String name;
 

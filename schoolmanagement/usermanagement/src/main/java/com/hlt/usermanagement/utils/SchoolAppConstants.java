@@ -33,6 +33,11 @@ public final class SchoolAppConstants {
     public static final String TEACHER_UPDATE_SUCCESS = "teacher updated successfully";
     public static final String TEACHER_CREATE_SUCCESS = "teacher created successfully";
 
+    public static final String SUBJECT_FETCH_BY_CLASS_SUCCESS = "Subject fetch by class successfully";
+    public static final String SUBJECT_DELETE_SUCCESS = "Subject deleted successfully";
+    public static final String SUBJECT_UPDATE_SUCCESS = "Subject updated successfully";
+    public static final String SUBJECT_CREATE_SUCCESS = "Subject created successfully";
+
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

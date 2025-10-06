@@ -38,6 +38,10 @@ public final class SchoolAppConstants {
     public static final String SUBJECT_UPDATE_SUCCESS = "Subject updated successfully";
     public static final String SUBJECT_CREATE_SUCCESS = "Subject created successfully";
 
+    public static final String ATTENDANCE_SAVE_SUCCESS = "attendance saved successfully";
+    public static final String ATTENDANCE_FETCH_SUCCESS = "attendance fetch successfully";
+    public static final String ATTENDANCE_PERCENTAGE_SUCCESS = "attendance fetch successfully";
+
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

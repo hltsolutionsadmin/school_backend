@@ -1,7 +1,10 @@
 package com.hlt.usermanagement.model;
 
+import com.hlt.usermanagement.dto.enums.DepartmentType;
+import com.hlt.usermanagement.dto.enums.StaffType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,24 +21,22 @@ import lombok.Setter;
 @Setter
 public class StaffModel extends AuditableModel {
 
-    @NotBlank
-    @Size(max = 50)
-    @Column(name = "STAFF_TYPE", nullable = false)
-    private String staffType;  
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STAFF_TYPE", nullable = false, length = 50)
+    private StaffType staffType;
 
-    @Size(max = 100)
-    @Column(name = "DEPARTMENT")
-    private String department;  
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEPARTMENT", length = 100)
+    private DepartmentType department;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive = Boolean.TRUE;
 
-    /** Relation to User */
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false, unique = true)
     private UserModel user;
 
-    /** Belongs to a school */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SCHOOL_ID", nullable = false)
     private SchoolModel school;

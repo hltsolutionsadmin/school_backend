@@ -19,6 +19,22 @@ public final class SchoolAppConstants {
     public static final String STUDENT_FETCH_SUCCESS = "student fetch successfully";
     public static final String SUBJECT_FETCH_SUCCESS = "subject fetch successfully";
 
+    // ========================= Diary Entry Messages =========================
+    public static final String DIARY_ENTRY_CREATE_SUCCESS = "Diary entry created successfully.";
+    public static final String DIARY_ENTRY_UPDATE_SUCCESS = "Diary entry updated successfully.";
+    public static final String DIARY_ENTRY_FETCH_SUCCESS  = "Diary entry fetched successfully.";
+    public static final String DIARY_ENTRY_LIST_FETCH_SUCCESS = "Diary entries fetched successfully.";
+    public static final String DIARY_ENTRY_DELETE_SUCCESS = "Diary entry deleted successfully.";
+    public static final String DIARY_ENTRY_NOT_FOUND = "Diary entry not found.";
+
+
+
+    public static final String HOMEWORK_CREATE_SUCCESS = "Homework created successfully";
+    public static final String HOMEWORK_FETCH_SUCCESS = "Homework fetched successfully";
+    public static final String HOMEWORK_UPDATE_SUCCESS = "Homework updated successfully";
+    public static final String HOMEWORK_DELETE_SUCCESS = "Homework deleted successfully";
+    public static final String HOMEWORK_LIST_FETCH_SUCCESS = "Homework list fetched successfully";
+
     public static final String STUDENT_CREATE_SUCCESS = "Student created successfully";
     public static final String STUDENT_UPDATE_SUCCESS = "Student updated successfully";
     public static final String STUDENT_DELETE_SUCCESS = "Student deleted successfully";

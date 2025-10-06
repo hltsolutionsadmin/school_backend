@@ -72,7 +72,7 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectDTO updateSubject(Long id, SubjectDTO subjectDTO) {
         log.info("Updating subject with ID {}", id);
 
-        SubjectModel subject = subjectRepository.findById(id)
+            SubjectModel subject = subjectRepository.findById(id)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.SUBJECT_NOT_FOUND));
 
         if (!subject.getName().equals(subjectDTO.getName()) &&

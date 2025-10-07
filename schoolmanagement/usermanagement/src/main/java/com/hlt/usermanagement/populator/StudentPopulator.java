@@ -8,8 +8,13 @@ import com.hlt.usermanagement.model.UserModel;
 import com.hlt.usermanagement.repository.ClassRepository;
 import com.hlt.usermanagement.repository.SchoolRepository;
 import com.hlt.usermanagement.repository.UserRepository;
+// Assuming these exception classes exist as per your service implementation
+import com.schoolmanagement.auth.exception.handling.ErrorCode;
+import com.schoolmanagement.auth.exception.handling.HltCustomerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,41 +24,39 @@ public class StudentPopulator {
     private final SchoolRepository schoolRepository;
     private final ClassRepository classRepository;
 
+    private final PersonalDetailsPopulator personalDetailsPopulator;
+    private final AcademicDetailsPopulator academicDetailsPopulator;
+
+
     public StudentModel toEntity(StudentDTO dto) {
         StudentModel entity = new StudentModel();
-        entity.setId(dto.getId());
         entity.setRollNumber(dto.getRollNumber());
         entity.setAdmissionDate(dto.getAdmissionDate());
-        entity.setActive(dto.getActive());
-
-        if (dto.getUserId() != null) {
-            UserModel user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with id " + dto.getUserId()));
-            entity.setUser(user);
+        entity.setActive(Optional.ofNullable(dto.getActive()).orElse(Boolean.TRUE));
+        if (dto.getPersonalDetails() != null) {
+            entity.setPersonalDetails(personalDetailsPopulator.toEntity(dto.getPersonalDetails()));
         }
-
-        if (dto.getSchoolId() != null) {
-            SchoolModel school = schoolRepository.findById(dto.getSchoolId())
-                    .orElseThrow(() -> new RuntimeException("School not found with id " + dto.getSchoolId()));
-            entity.setSchool(school);
+        if (dto.getAcademicDetails() != null) {
+            entity.setAcademicDetails(academicDetailsPopulator.toEntity(dto.getAcademicDetails()));
         }
-
-        if (dto.getClassId() != null) {
-            ClassModel classModel = classRepository.findById(dto.getClassId())
-                    .orElseThrow(() -> new RuntimeException("Class not found with id " + dto.getClassId()));
-            entity.setClassModel(classModel);
-        }
+        mapForeignKeysToEntity(dto, entity);
 
         return entity;
     }
 
     public StudentDTO toDTO(StudentModel entity) {
         StudentDTO dto = new StudentDTO();
+
         dto.setId(entity.getId());
         dto.setRollNumber(entity.getRollNumber());
         dto.setAdmissionDate(entity.getAdmissionDate());
         dto.setActive(entity.getActive());
-
+        if (entity.getPersonalDetails() != null) {
+            dto.setPersonalDetails(personalDetailsPopulator.toDTO(entity.getPersonalDetails()));
+        }
+        if (entity.getAcademicDetails() != null) {
+            dto.setAcademicDetails(academicDetailsPopulator.toDTO(entity.getAcademicDetails()));
+        }
         if (entity.getUser() != null) {
             dto.setUserId(entity.getUser().getId());
             dto.setUserName(entity.getUser().getFullName());
@@ -77,23 +80,33 @@ public class StudentPopulator {
         if (dto.getRollNumber() != null) student.setRollNumber(dto.getRollNumber());
         if (dto.getAdmissionDate() != null) student.setAdmissionDate(dto.getAdmissionDate());
         if (dto.getActive() != null) student.setActive(dto.getActive());
+        if (dto.getPersonalDetails() != null && student.getPersonalDetails() != null) {
+            personalDetailsPopulator.updateEntity(dto.getPersonalDetails(), student.getPersonalDetails());
+        }
+        if (dto.getAcademicDetails() != null && student.getAcademicDetails() != null) {
+            academicDetailsPopulator.updateEntity(dto.getAcademicDetails(), student.getAcademicDetails());
+        }
+        mapForeignKeysToEntity(dto, student);
+    }
 
+
+    private void mapForeignKeysToEntity(StudentDTO dto, StudentModel entity) {
         if (dto.getUserId() != null) {
             UserModel user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found with id " + dto.getUserId()));
-            student.setUser(user);
+                    .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND));
+            entity.setUser(user);
         }
 
         if (dto.getSchoolId() != null) {
             SchoolModel school = schoolRepository.findById(dto.getSchoolId())
-                    .orElseThrow(() -> new RuntimeException("School not found with id " + dto.getSchoolId()));
-            student.setSchool(school);
+                    .orElseThrow(() -> new HltCustomerException(ErrorCode.SCHOOL_NOT_FOUND));
+            entity.setSchool(school);
         }
 
         if (dto.getClassId() != null) {
             ClassModel classModel = classRepository.findById(dto.getClassId())
-                    .orElseThrow(() -> new RuntimeException("Class not found with id " + dto.getClassId()));
-            student.setClassModel(classModel);
+                    .orElseThrow(() -> new HltCustomerException(ErrorCode.CLASS_NOT_FOUND));
+            entity.setClassModel(classModel);
         }
     }
 }

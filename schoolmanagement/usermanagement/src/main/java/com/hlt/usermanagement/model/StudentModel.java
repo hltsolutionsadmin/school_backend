@@ -4,14 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.NoArgsConstructor; // Added for JPA compatibility
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "STUDENT")
 @Getter
 @Setter
+@NoArgsConstructor // Added for JPA compatibility
 @ToString(exclude = {"user", "school", "classModel", "personalDetails", "academicDetails", "grades", "attendanceRecords"})
 public class StudentModel extends GenericModel { // Assumes GenericModel exists
 
@@ -49,4 +52,8 @@ public class StudentModel extends GenericModel { // Assumes GenericModel exists
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AttendanceModel> attendanceRecords = new ArrayList<>(); // Assumes AttendanceModel exists
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<FeeStructure> feeStructures;
+
 }

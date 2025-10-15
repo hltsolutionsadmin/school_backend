@@ -18,7 +18,7 @@ import java.util.*;
 )
 @Getter
 @Setter
-public class ClassModel extends AuditableModel {
+public class AcademicUnitModel extends AuditableModel {
 
     @NotBlank
     @Size(max = 50)

@@ -58,6 +58,10 @@ public final class SchoolAppConstants {
     public static final String ATTENDANCE_FETCH_SUCCESS = "attendance fetch successfully";
     public static final String ATTENDANCE_PERCENTAGE_SUCCESS = "attendance fetch successfully";
 
+    public static final String EXAM_CREATE_SUCCESS = "Exam created successfully";
+    public static final String EXAM_UPDATE_SUCCESS = "Exam updated successfully";
+    public static final String EXAM_DELETE_SUCCESS = "Exam deleted successfully";
+    public static final String EXAM_FETCH_SUCCESS = "Exam fetch successfully";
 
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";

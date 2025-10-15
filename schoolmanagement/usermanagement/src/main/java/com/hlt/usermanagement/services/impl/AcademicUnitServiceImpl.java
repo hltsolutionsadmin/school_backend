@@ -1,6 +1,6 @@
 package com.hlt.usermanagement.services.impl;
 
-import com.hlt.usermanagement.dto.ClassDTO;
+import com.hlt.usermanagement.dto.AcademicUnitDTO;
 import com.hlt.usermanagement.dto.StudentDTO;
 import com.hlt.usermanagement.dto.SubjectDTO;
 import com.hlt.usermanagement.model.SchoolModel;
@@ -8,11 +8,11 @@ import com.hlt.usermanagement.model.TeacherModel;
 import com.hlt.usermanagement.repository.*;
 import com.schoolmanagement.auth.exception.handling.HltCustomerException;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
-import com.hlt.usermanagement.model.ClassModel;
-import com.hlt.usermanagement.populator.ClassPopulator;
+import com.hlt.usermanagement.model.AcademicUnitModel;
+import com.hlt.usermanagement.populator.AcademicUnitPopulator;
 import com.hlt.usermanagement.populator.StudentPopulator;
 import com.hlt.usermanagement.populator.SubjectPopulator;
-import com.hlt.usermanagement.services.ClassService;
+import com.hlt.usermanagement.services.AcademicUnitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ClassServiceImpl implements ClassService {
+public class AcademicUnitServiceImpl implements AcademicUnitService {
 
     private final ClassRepository classRepository;
     private final StudentRepository studentRepository;
@@ -34,13 +34,13 @@ public class ClassServiceImpl implements ClassService {
 
 
 
-    private final ClassPopulator classPopulator;
+    private final AcademicUnitPopulator classPopulator;
     private final StudentPopulator studentPopulator;
     private final SubjectPopulator subjectPopulator;
 
     @Override
-    public ClassDTO createClass(ClassDTO dto) {
-        ClassModel model = new ClassModel();
+    public AcademicUnitDTO createClass(AcademicUnitDTO dto) {
+        AcademicUnitModel model = new AcademicUnitModel();
         model.setClassName(dto.getClassName());
         model.setSection(dto.getSection());
         model.setAcademicYear(dto.getAcademicYear());
@@ -55,13 +55,13 @@ public class ClassServiceImpl implements ClassService {
 
         model.setSchool(schoolModel);
 
-        ClassModel savedModel = classRepository.save(model);
+        AcademicUnitModel savedModel = classRepository.save(model);
         return classPopulator.toDTO(savedModel);
     }
 
     @Override
-    public ClassDTO updateClass(Long id, ClassDTO dto) {
-        ClassModel model = classRepository.findById(id)
+    public AcademicUnitDTO updateClass(Long id, AcademicUnitDTO dto) {
+        AcademicUnitModel model = classRepository.findById(id)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.CLASS_NOT_FOUND));
 
         // Basic property updates
@@ -89,13 +89,13 @@ public class ClassServiceImpl implements ClassService {
             model.setClassTeacher(null);
         }
 
-        ClassModel updatedModel = classRepository.save(model);
+        AcademicUnitModel updatedModel = classRepository.save(model);
         return classPopulator.toDTO(updatedModel);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ClassDTO getClassById(Long id) {
+    public AcademicUnitDTO getClassById(Long id) {
         return classRepository.findById(id)
                 .map(classPopulator::toDTO)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.CLASS_NOT_FOUND));

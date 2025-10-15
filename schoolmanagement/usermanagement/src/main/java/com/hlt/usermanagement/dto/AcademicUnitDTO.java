@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-public class ClassDTO {
+public class AcademicUnitDTO {
 
     private Long id;
 

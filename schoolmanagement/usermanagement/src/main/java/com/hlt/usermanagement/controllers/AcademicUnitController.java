@@ -1,9 +1,9 @@
 package com.hlt.usermanagement.controllers;
 
-import com.hlt.usermanagement.dto.ClassDTO;
+import com.hlt.usermanagement.dto.AcademicUnitDTO;
 import com.hlt.usermanagement.dto.StudentDTO;
 import com.hlt.usermanagement.dto.SubjectDTO;
-import com.hlt.usermanagement.services.ClassService;
+import com.hlt.usermanagement.services.AcademicUnitService;
 import com.hlt.usermanagement.utils.SchoolAppConstants;
 import com.schoolmanagement.commonservice.dto.StandardResponse;
 
@@ -22,34 +22,34 @@ import java.util.List;
 @RequestMapping("/v1/classes")
 @Slf4j
 @RequiredArgsConstructor
-public class ClassController {
+public class AcademicUnitController {
 
-    private final ClassService classService;
+    private final AcademicUnitService classService;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<StandardResponse<ClassDTO>> createClass(@Valid @RequestBody ClassDTO dto) {
+    public ResponseEntity<StandardResponse<AcademicUnitDTO>> createClass(@Valid @RequestBody AcademicUnitDTO dto) {
         log.info("Request received to create class: {}", dto.getClassName());
-        ClassDTO savedClass = classService.createClass(dto);
+        AcademicUnitDTO savedClass = classService.createClass(dto);
         log.info("Class created successfully with ID: {}", savedClass.getId());
         return ResponseEntity.ok(StandardResponse.single(SchoolAppConstants.CLASS_CREATE_SUCCESS, savedClass));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<StandardResponse<ClassDTO>> updateClass(
+    public ResponseEntity<StandardResponse<AcademicUnitDTO>> updateClass(
             @PathVariable Long id,
-            @Valid @RequestBody ClassDTO dto) {
+            @Valid @RequestBody AcademicUnitDTO dto) {
         log.info("Request received to update class with ID: {}", id);
-        ClassDTO updatedClass = classService.updateClass(id, dto);
+        AcademicUnitDTO updatedClass = classService.updateClass(id, dto);
         log.info("Class updated successfully with ID: {}", updatedClass.getId());
         return ResponseEntity.ok(StandardResponse.single(SchoolAppConstants.CLASS_UPDATE_SUCCESS, updatedClass));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StandardResponse<ClassDTO>> getClassById(@PathVariable Long id) {
+    public ResponseEntity<StandardResponse<AcademicUnitDTO>> getClassById(@PathVariable Long id) {
         log.info("Request received to fetch class with ID: {}", id);
-        ClassDTO dto = classService.getClassById(id);
+        AcademicUnitDTO dto = classService.getClassById(id);
         log.info("Class fetched successfully with ID: {}", dto.getId());
         return ResponseEntity.ok(StandardResponse.single(SchoolAppConstants.CLASS_FETCH_SUCCESS, dto));
     }

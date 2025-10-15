@@ -1,17 +1,17 @@
 package com.hlt.usermanagement.populator;
 
-import com.hlt.usermanagement.dto.ClassDTO;
-import com.hlt.usermanagement.model.ClassModel;
+import com.hlt.usermanagement.dto.AcademicUnitDTO;
+import com.hlt.usermanagement.model.AcademicUnitModel;
 import com.schoolmanagement.utils.Populator;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-public class ClassPopulator implements Populator<ClassModel, ClassDTO> {
+public class AcademicUnitPopulator implements Populator<AcademicUnitModel, AcademicUnitDTO> {
 
     @Override
-    public void populate(ClassModel source, ClassDTO target) {
+    public void populate(AcademicUnitModel source, AcademicUnitDTO target) {
         if (source == null || target == null) return;
 
         target.setId(source.getId());
@@ -52,9 +52,9 @@ public class ClassPopulator implements Populator<ClassModel, ClassDTO> {
         }
     }
 
-    public ClassDTO toDTO(ClassModel source) {
+    public AcademicUnitDTO toDTO(AcademicUnitModel source) {
         if (source == null) return null;
-        ClassDTO dto = new ClassDTO();
+        AcademicUnitDTO dto = new AcademicUnitDTO();
         populate(source, dto);
         return dto;
     }

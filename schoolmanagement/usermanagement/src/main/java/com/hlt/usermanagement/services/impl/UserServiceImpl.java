@@ -2,9 +2,7 @@ package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.model.MediaModel;
 import com.hlt.usermanagement.model.RoleModel;
-import com.hlt.usermanagement.model.SchoolModel;
 import com.hlt.usermanagement.model.UserModel;
-import com.hlt.usermanagement.repository.SchoolRepository;
 import com.schoolmanagement.commonservice.dto.Role;
 import com.schoolmanagement.auth.UserServiceAdapter;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
@@ -44,7 +42,6 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
     private final CaffeineCacheManager cacheManager;
     private final MediaRepository mediaRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SchoolRepository schoolRepository;
 
     @Override
     public UserModel saveUser(UserModel userModel) {
@@ -70,7 +67,6 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRoles(fetchRoles(dto.getUserRoles()));
-        user.setSchool(fetchSchoolById(dto.getSchoolId()));
 
         return saveUser(user).getId();
     }
@@ -105,15 +101,10 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
         user.setPrimaryContact(mobileNumber);
         user.setRoles(fetchRoles(userRoles));
         user.setFullName(fullName);
-         user.setSchool(fetchSchoolById(schoolId));
 
         return saveUser(user).getId();
     }
 
-    private SchoolModel fetchSchoolById(Long schoolId) {
-        return schoolRepository.findById(schoolId)
-                .orElseThrow(() -> new HltCustomerException(ErrorCode.SCHOOL_NOT_FOUND));
-    }
     @Override
     public void addUserRole(Long userId, ERole userRole) {
         UserModel user = getUserByIdOrThrow(userId);

@@ -14,8 +14,6 @@ public interface AttendanceRepository extends JpaRepository<AttendanceModel, Lon
 
     Page<AttendanceModel> findByStudent_Id(Long studentId, Pageable pageable);
 
-    List<AttendanceModel> findByStudent_ClassModel_IdAndDate(Long classId, LocalDate date);
-
     AttendanceModel findByStudent_IdAndDate(Long studentId, LocalDate date);
 
     Long countByStudent_IdAndDateBetweenAndPresentTrue(Long studentId, LocalDate startDate, LocalDate endDate);

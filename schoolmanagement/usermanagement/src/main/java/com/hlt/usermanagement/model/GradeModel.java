@@ -12,7 +12,7 @@ public class GradeModel extends GenericModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STUDENT_ID", nullable = false)
-    private StudentModel student;
+    private UserModel student;
 
     @Column(name = "SUBJECT", nullable = false)
     private String subject;

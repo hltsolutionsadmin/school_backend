@@ -29,5 +29,5 @@ public class SchoolCalendarModel extends GenericModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SCHOOL_ID", foreignKey = @ForeignKey(name = "FK_CALENDAR_SCHOOL"))
-    private SchoolModel school;
+    private B2BUnitModel school;
 }

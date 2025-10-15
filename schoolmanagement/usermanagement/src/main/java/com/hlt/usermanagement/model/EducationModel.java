@@ -35,13 +35,13 @@ public class EducationModel extends AuditableModel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STUDENT_ID", nullable = false)
-	private StudentModel student;
+	private UserModel student;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SCHOOL_ID", nullable = false)
-	private SchoolModel school;
+	private B2BUnitModel school;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CLASS_ID")
-	private ClassModel classModel;
+	private AcademicUnitModel classModel;
 }

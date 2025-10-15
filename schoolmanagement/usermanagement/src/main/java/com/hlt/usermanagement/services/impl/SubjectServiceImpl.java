@@ -1,12 +1,8 @@
 package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.dto.SubjectDTO;
-import com.hlt.usermanagement.model.ClassModel;
 import com.hlt.usermanagement.model.SubjectModel;
-import com.hlt.usermanagement.model.TeacherModel;
-import com.hlt.usermanagement.repository.ClassRepository;
 import com.hlt.usermanagement.repository.SubjectRepository;
-import com.hlt.usermanagement.repository.TeacherRepository;
 import com.hlt.usermanagement.services.SubjectService;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
 import com.schoolmanagement.auth.exception.handling.HltCustomerException;
@@ -17,10 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +20,7 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
-    private final ClassRepository classRepository;
-    private final TeacherRepository teacherRepository;
+
 
     /**
      * Add new subject to a class
@@ -38,8 +29,7 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectDTO addSubject(SubjectDTO subjectDTO) {
         log.info("Adding subject '{}' with code '{}' to class {}", subjectDTO.getName(), subjectDTO.getCode(), subjectDTO.getClassId());
 
-        ClassModel classModel = classRepository.findById(subjectDTO.getClassId())
-                .orElseThrow(() -> new HltCustomerException(ErrorCode.CLASS_NOT_FOUND));
+
 
         if (subjectRepository.existsByNameAndClassModelId(subjectDTO.getName(), subjectDTO.getClassId())) {
             throw new HltCustomerException(ErrorCode.SUBJECT_ALREADY_EXISTS);
@@ -51,13 +41,7 @@ public class SubjectServiceImpl implements SubjectService {
         SubjectModel subject = new SubjectModel();
         subject.setName(subjectDTO.getName());
         subject.setCode(subjectDTO.getCode());
-        subject.setClassModel(classModel);
 
-        if (subjectDTO.getTeacherIds() != null && !subjectDTO.getTeacherIds().isEmpty()) {
-            Set<TeacherModel> teachers = teacherRepository.findAllById(subjectDTO.getTeacherIds())
-                    .stream().collect(Collectors.toSet());
-            subject.setTeachers(teachers);
-        }
 
         SubjectModel saved = subjectRepository.save(subject);
         log.info("Subject '{}' created successfully with ID {}", saved.getName(), saved.getId());
@@ -88,11 +72,6 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setName(subjectDTO.getName());
         subject.setCode(subjectDTO.getCode());
 
-        if (subjectDTO.getTeacherIds() != null) {
-            Set<TeacherModel> teachers = teacherRepository.findAllById(subjectDTO.getTeacherIds())
-                    .stream().collect(Collectors.toSet());
-            subject.setTeachers(teachers);
-        }
 
         SubjectModel updated = subjectRepository.save(subject);
         log.info("Subject with ID {} updated successfully", updated.getId());
@@ -155,15 +134,7 @@ public class SubjectServiceImpl implements SubjectService {
         dto.setClassName(subject.getClassModel().getClassName());
         dto.setSection(subject.getClassModel().getSection());
 
-        if (subject.getTeachers() != null) {
-            dto.setTeacherIds(subject.getTeachers().stream()
-                    .map(TeacherModel::getId)
-                    .collect(Collectors.toSet()));
 
-            dto.setTeacherNames(subject.getTeachers().stream()
-                    .map(t -> t.getUser().getFullName())
-                    .collect(Collectors.toSet()));
-        }
 
         return dto;
     }

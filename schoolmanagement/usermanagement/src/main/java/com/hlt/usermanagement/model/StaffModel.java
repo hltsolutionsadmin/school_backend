@@ -39,5 +39,5 @@ public class StaffModel extends AuditableModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SCHOOL_ID", nullable = false)
-    private SchoolModel school;
+    private B2BUnitModel school;
 }

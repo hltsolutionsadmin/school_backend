@@ -72,8 +72,8 @@ public class UserModel extends AuditableModel {
     private String fcmToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SCHOOL_ID")
-    private SchoolModel school;
+    @JoinColumn(name = "B2B_UNIT_ID")
+    private B2BUnitModel b2bUnit;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -88,4 +88,14 @@ public class UserModel extends AuditableModel {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressModel> addresses = new ArrayList<>();
+
+    // Parent → Children
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USER_CHILDREN",
+            joinColumns = @JoinColumn(name = "PARENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "STUDENT_ID")
+    )
+    private Set<UserModel> children = new HashSet<>();
+
 }

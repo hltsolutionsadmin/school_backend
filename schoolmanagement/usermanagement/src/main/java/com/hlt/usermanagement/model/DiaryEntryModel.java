@@ -15,7 +15,7 @@ public class DiaryEntryModel extends AuditableModel {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STUDENT_ID", nullable = false)
-    private StudentModel student;
+    private UserModel student;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STAFF_ID", nullable = false)

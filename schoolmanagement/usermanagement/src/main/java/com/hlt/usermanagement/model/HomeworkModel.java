@@ -25,7 +25,7 @@ public class HomeworkModel extends AuditableModel {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STUDENT_ID", nullable = false)
-    private StudentModel student;
+    private UserModel student;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STAFF_ID", nullable = false)
@@ -33,7 +33,7 @@ public class HomeworkModel extends AuditableModel {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "SCHOOL_ID", nullable = false)
-    private SchoolModel school;
+    private B2BUnitModel school;
 
     @NotBlank
     @Size(max = 100)

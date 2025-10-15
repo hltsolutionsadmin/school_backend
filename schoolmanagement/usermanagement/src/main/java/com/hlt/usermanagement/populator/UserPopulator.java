@@ -34,9 +34,7 @@ public class UserPopulator implements Populator<UserModel, UserDTO> {
         target.setFcmToken(source.getFcmToken());
         target.setPassword(source.getPassword());
 
-        if (source.getSchool() != null) {
-            target.setSchoolId(source.getSchool().getId());
-        }
+
 
         if (source.getRoles() != null && !source.getRoles().isEmpty()) {
             target.setRoles(

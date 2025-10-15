@@ -32,13 +32,7 @@ public class SubjectPopulator implements Populator<SubjectModel, SubjectDTO> {
                     .filter(id -> id != null)
                     .collect(Collectors.toSet());
 
-            Set<String> teacherNames = source.getTeachers().stream()
-                    .map(t -> (t.getUser() != null ? t.getUser().getFullName() : null))
-                    .filter(name -> name != null && !name.isBlank())
-                    .collect(Collectors.toSet());
 
-            target.setTeacherIds(teacherIds);
-            target.setTeacherNames(teacherNames);
         } else {
             target.setTeacherIds(Collections.emptySet());
             target.setTeacherNames(Collections.emptySet());

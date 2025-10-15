@@ -19,7 +19,7 @@ public class SubjectModel extends GenericModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLASS_ID", nullable = false)
-    private ClassModel classModel;
+    private AcademicUnitModel classModel;
 
     @ManyToMany
     @JoinTable(
@@ -27,5 +27,5 @@ public class SubjectModel extends GenericModel {
             joinColumns = @JoinColumn(name = "SUBJECT_ID"),
             inverseJoinColumns = @JoinColumn(name = "TEACHER_ID")
     )
-    private Set<TeacherModel> teachers = new HashSet<>();
+    private Set<UserModel> teachers = new HashSet<>();
 }

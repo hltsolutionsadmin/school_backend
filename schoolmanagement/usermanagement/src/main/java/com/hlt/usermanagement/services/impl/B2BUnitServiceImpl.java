@@ -1,0 +1,293 @@
+package com.hlt.usermanagement.services.impl;
+
+
+import com.hlt.usermanagement.dto.AddressDTO;
+import com.hlt.usermanagement.dto.B2BUnitDTO;
+import com.hlt.usermanagement.dto.B2BUnitStatusDTO;
+import com.hlt.usermanagement.dto.UserDTO;
+import com.hlt.usermanagement.dto.request.B2BUnitRequest;
+import com.hlt.usermanagement.dto.response.B2BUnitListResponse;
+import com.hlt.usermanagement.dto.response.BusinessAttributeResponse;
+import com.hlt.usermanagement.model.AddressModel;
+import com.hlt.usermanagement.model.B2BUnitModel;
+import com.hlt.usermanagement.model.BusinessAttributeModel;
+import com.hlt.usermanagement.model.UserModel;
+import com.hlt.usermanagement.populator.AddressPopulator;
+import com.hlt.usermanagement.populator.B2BUnitPopulator;
+import com.hlt.usermanagement.populator.UserPopulator;
+import com.hlt.usermanagement.repository.B2BUnitRepository;
+import com.hlt.usermanagement.repository.UserRepository;
+import com.hlt.usermanagement.services.B2BUnitService;
+import com.hlt.usermanagement.services.UserService;
+import com.schoolmanagement.auth.exception.handling.ErrorCode;
+import com.schoolmanagement.auth.exception.handling.HltCustomerException;
+import com.schoolmanagement.commonservice.dto.BasicOnboardUserDTO;
+import com.schoolmanagement.commonservice.dto.Role;
+import com.schoolmanagement.commonservice.enums.ERole;
+import com.schoolmanagement.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class B2BUnitServiceImpl  implements B2BUnitService {
+
+    private final B2BUnitRepository b2bUnitRepository;
+    private final B2BUnitPopulator b2bUnitPopulator;
+    private final UserRepository userRepository;
+    private final UserPopulator userPopulator;
+    private final UserService userService;
+    private final AddressPopulator addressPopulator;
+
+    @Override
+    @Transactional
+    public B2BUnitDTO createOrUpdate(B2BUnitRequest request) throws IOException {
+        B2BUnitModel unit;
+
+        if (request.getBusinessCode() != null) {
+            //Update flow: Fetch existing unit
+            unit = b2bUnitRepository.findByBusinessCode(request.getBusinessCode())
+                    .orElseThrow(() -> new HltCustomerException(ErrorCode.BUSINESS_NOT_FOUND));
+
+            // Update existing unit fields
+            populateBasicDetails(unit, request);
+            populateAddress(unit, request);
+            populateAttributes(unit, request);
+
+            // Save updated unit
+            B2BUnitModel updated = b2bUnitRepository.save(unit);
+            return buildResponseDTO(updated);
+
+        } else {
+            // Create flow: new unit first
+            unit = new B2BUnitModel();
+            unit.setBusinessCode(generateBusinessCode());
+
+            // Populate details before saving
+            populateBasicDetails(unit, request);
+            populateAddress(unit, request);
+            populateAttributes(unit, request);
+
+            // Save once to generate businessId
+            B2BUnitModel savedUnit = b2bUnitRepository.save(unit);
+
+            // Onboard admin user now that businessId exists
+            BasicOnboardUserDTO basicOnboardUserDTO = buildBasicOnboardUserDTO(request, savedUnit.getId());
+            Long onboardedUserId = userService.onBoardUserWithCredentials(basicOnboardUserDTO);
+            UserModel currentUser = fetchCurrentUser(onboardedUserId);
+
+            // Link admin and save again
+            savedUnit.setAdmin(currentUser);
+            B2BUnitModel finalSaved = b2bUnitRepository.save(savedUnit);
+
+            return buildResponseDTO(finalSaved);
+        }
+    }
+
+    private BasicOnboardUserDTO buildBasicOnboardUserDTO(B2BUnitRequest request, Long businessId) {
+        return BasicOnboardUserDTO.builder()
+                .username(request.getAdminUsername())
+                .email(request.getAdminEmail())
+                .fullName(request.getAdminFullName())
+                .primaryContact(request.getAdminMobile())
+                .password(request.getAdminPassword())
+                .userRoles(Set.of(ERole.ROLE_BUSINESS_ADMIN))
+                .build();
+    }
+
+    private void populateBasicDetails(B2BUnitModel unit, B2BUnitRequest request) {
+        Optional.ofNullable(request.getBusinessName()).ifPresent(unit::setBusinessName);
+        Optional.ofNullable(request.getContactNumber()).ifPresent(unit::setContactNumber);
+        Optional.ofNullable(request.getLatitude()).ifPresent(unit::setBusinessLatitude);
+        Optional.ofNullable(request.getLongitude()).ifPresent(unit::setBusinessLongitude);
+        Optional.ofNullable(request.getBusinessType()).ifPresent(unit::setType);
+        Optional.ofNullable(request.getEnabled()).ifPresent(unit::setEnabled);
+        Optional.ofNullable(request.getTemporarilyClosed()).ifPresent(unit::setTemporarilyClosed);
+    }
+
+    private void populateAddress(B2BUnitModel unit, B2BUnitRequest request) {
+        AddressModel address = Optional.ofNullable(unit.getBusinessAddress()).orElseGet(AddressModel::new);
+
+        Optional.ofNullable(request.getAddressLine1()).ifPresent(address::setAddressLine1);
+        Optional.ofNullable(request.getStreet()).ifPresent(address::setStreet);
+        Optional.ofNullable(request.getCity()).ifPresent(address::setCity);
+        Optional.ofNullable(request.getState()).ifPresent(address::setState);
+        Optional.ofNullable(request.getCountry()).ifPresent(address::setCountry);
+        Optional.ofNullable(request.getPostalCode()).ifPresent(address::setPostalCode);
+        Optional.ofNullable(request.getLatitude()).ifPresent(address::setLatitude);
+        Optional.ofNullable(request.getLongitude()).ifPresent(address::setLongitude);
+
+        unit.setBusinessAddress(address);
+    }
+
+
+
+    private void populateAttributes(B2BUnitModel unit, B2BUnitRequest request) {
+        if (request.getAttributes() == null || request.getAttributes().isEmpty()) return;
+
+        Set<BusinessAttributeModel> attributes = Optional.ofNullable(unit.getAttributes())
+                .orElseGet(() -> {
+                    Set<BusinessAttributeModel> newSet = new HashSet<>();
+                    unit.setAttributes(newSet);
+                    return newSet;
+                });
+
+        attributes.clear();
+        request.getAttributes().stream().map(attr -> {
+            BusinessAttributeModel model = new BusinessAttributeModel();
+            model.setAttributeName(attr.getAttributeName());
+            model.setAttributeValue(attr.getAttributeValue());
+            model.setB2bUnit(unit);
+            return model;
+        }).forEach(attributes::add);
+    }
+
+    private B2BUnitDTO buildResponseDTO(B2BUnitModel savedModel) {
+        B2BUnitDTO dto = b2bUnitPopulator.toDTO(savedModel);
+
+        Optional.ofNullable(savedModel.getAdmin()).ifPresent(admin -> {
+            UserDTO userDTO = new UserDTO();
+            userPopulator.populate(admin, userDTO);
+            dto.setAdminUser(userDTO);
+        });
+
+        return dto;
+    }
+
+    private String generateBusinessCode() {
+        return "BUS-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    private UserModel fetchCurrentUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND));
+    }
+
+
+    @Override
+    public Page<B2BUnitListResponse> listAllPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("creationDate").descending());
+        Page<B2BUnitModel> b2bUnits = b2bUnitRepository.findAll(pageable);
+
+        return b2bUnits.map(this::mapToB2BUnitListResponse);
+    }
+
+
+
+    private B2BUnitListResponse mapToB2BUnitListResponse(B2BUnitModel model) {
+        B2BUnitListResponse response = new B2BUnitListResponse();
+
+        response.setId(model.getId());
+        response.setBusinessName(model.getBusinessName());
+
+
+        if (model.getAdmin() != null) {
+            response.setUserId(model.getAdmin().getId());
+        }
+
+
+
+        return response;
+    }
+
+    @Override
+    public B2BUnitDTO getById(Long id) {
+        B2BUnitModel model = b2bUnitRepository.findById(id)
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.BUSINESS_NOT_FOUND));
+
+        B2BUnitDTO dto = new B2BUnitDTO();
+        b2bUnitPopulator.populate(model, dto);
+        dto.setEnabled(Boolean.TRUE.equals(model.getEnabled()));
+
+        return dto;
+    }
+
+
+    @Override
+    public List<B2BUnitStatusDTO> getBusinessNameAndApprovalStatusForLoggedInUser() {
+        Long userId = SecurityUtils.getCurrentUserDetails().getId();
+
+        UserModel userModel = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Set<Role> userRoles = userModel.getRoles().stream()
+                .map(role -> new Role(role.getId(), role.getName()))
+                .collect(Collectors.toSet());
+
+        List<B2BUnitModel> b2BUnits = b2bUnitRepository.findByAdminId(userId);
+
+        if (b2BUnits.isEmpty()) {
+            return List.of(B2BUnitStatusDTO.rolesOnly(userRoles));
+        }
+
+        return b2BUnits.stream()
+                .map(b2BUnit -> mapToStatusDTO(b2BUnit, userRoles))
+                .toList();
+
+    }
+    private B2BUnitStatusDTO mapToStatusDTO(B2BUnitModel b2BUnit, Set<Role> userRoles) {
+        Set<BusinessAttributeResponse> attributes = b2BUnit.getAttributes().stream()
+                .map(attr -> new BusinessAttributeResponse(
+                        attr.getId(),
+                        attr.getAttributeName(),
+                        attr.getAttributeValue()
+                ))
+                .collect(Collectors.toSet());
+
+        return new B2BUnitStatusDTO(
+                b2BUnit.getId(),
+                b2BUnit.getBusinessName(),
+                b2BUnit.getEnabled(),
+                userRoles,
+                attributes
+        );
+    }
+
+
+
+//    @Override
+//    public Page<B2BUnitDTO> searchByCityAndCategory(String city, String categoryName, String searchTerm, Pageable pageable) {
+//        Page<B2BUnitModel> modelPage = b2bUnitRepository.findByCityAndCategoryName(city, categoryName, pageable);
+//
+//        List<B2BUnitModel> filteredModels = modelPage.stream()
+//                .filter(model -> {
+//                    if (searchTerm == null || searchTerm.isBlank()) return true;
+//                    String businessName = model.getBusinessName();
+//                    return businessName != null && businessName.toLowerCase().contains(searchTerm.toLowerCase());
+//                })
+//                .toList();
+//        List<B2BUnitDTO> dtoList = filteredModels.stream()
+//                .map(model -> {
+//                    B2BUnitDTO dto = new B2BUnitDTO();
+//                    b2bUnitPopulator.populate(model, dto);
+//                    if (model.getAdmin() != null) {
+//                        UserDTO userDTO = new UserDTO();
+//                        userPopulator.populate(model.getAdmin(), userDTO, false);
+//                        dto.setAdminUser(userDTO);
+//                    }
+//                    return dto;
+//                })
+//                .toList();
+//
+//        return new PageImpl<>(dtoList, pageable, filteredModels.size());
+//    }
+
+    public AddressDTO getAddressByB2BUnitId(Long unitId) {
+        AddressModel addressModel = b2bUnitRepository.findBusinessAddressByUnitId(unitId)
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.ADDRESS_NOT_FOUND, "Address not found for B2B Unit ID: " + unitId));
+        AddressDTO addressDTO = new AddressDTO();
+        addressPopulator.populate(addressModel, addressDTO);
+        return addressDTO;
+    }
+
+
+}

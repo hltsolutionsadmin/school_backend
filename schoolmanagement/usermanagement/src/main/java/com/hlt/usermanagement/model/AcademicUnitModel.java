@@ -10,15 +10,15 @@ import java.util.*;
 
 @Entity
 @Table(
-        name = "CLASS",
+        name = "ACADEMIC_UNIT",
         indexes = {
-                @Index(name = "idx_class_school", columnList = "SCHOOL_ID"),
+                @Index(name = "idx_class_school", columnList = "B2B_UNIT_ID"),
                 @Index(name = "idx_class_name_section", columnList = "CLASS_NAME, SECTION")
         }
 )
 @Getter
 @Setter
-public class ClassModel extends AuditableModel {
+public class AcademicUnitModel extends AuditableModel {
 
     @NotBlank
     @Size(max = 50)
@@ -32,20 +32,19 @@ public class ClassModel extends AuditableModel {
     @Column(name = "ACADEMIC_YEAR", nullable = false)
     private String academicYear;
 
-    /** Reference to School */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SCHOOL_ID", nullable = false)
-    private SchoolModel school;
+    @JoinColumn(name = "B2B_UNIT_ID")
+    private B2BUnitModel b2bUnit;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLASS_TEACHER_ID")
-    private TeacherModel classTeacher;
+    private UserModel classTeacher;
 
-    @OneToMany(mappedBy = "classModel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentModel> students = new ArrayList<>();
+//    @OneToMany(mappedBy = "studentClass", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<UserModel> students = new ArrayList<>();
 
-    @OneToMany(mappedBy = "classModel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SubjectModel> subjects = new HashSet<>();
+//    @OneToMany(mappedBy = "academicUnit", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<SubjectModel> subjects = new HashSet<>();
 
     @Column(name = "CAPACITY")
     private Integer capacity;

@@ -12,6 +12,7 @@ public enum ErrorCode {
     BUSINESS_NOT_FOUND(1002, "Business not found", HttpStatus.NOT_FOUND),
     HOMEWORK_NOT_FOUND(2001, "Homework not found", HttpStatus.NOT_FOUND),
     HOMEWORK_ALREADY_EXISTS(2002, "Homework already exists", HttpStatus.BAD_REQUEST),
+    INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
 
     EMAIL_ALREADY_IN_USE(1002, "Email Is Already In Use", HttpStatus.CONFLICT),
     UNAUTHORIZED(1003, "Unauthorized Access", HttpStatus.UNAUTHORIZED),

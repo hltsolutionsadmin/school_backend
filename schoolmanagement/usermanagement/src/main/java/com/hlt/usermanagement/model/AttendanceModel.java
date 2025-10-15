@@ -14,7 +14,7 @@ public class AttendanceModel extends GenericModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STUDENT_ID", nullable = false)
-    private StudentModel student;
+    private UserModel student;
 
     @Column(name = "DATE", nullable = false)
     private LocalDate date;

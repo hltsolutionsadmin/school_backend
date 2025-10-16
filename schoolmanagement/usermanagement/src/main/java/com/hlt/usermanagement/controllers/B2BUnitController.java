@@ -40,7 +40,7 @@ public class B2BUnitController {
 
     @PreAuthorize(SRAppConstants.ROLE_SUPER_ADMIN)
     @PostMapping("/onboard")
-    public ResponseEntity<B2BUnitDTO> createB2BUnit(@Valid @RequestBody B2BUnitRequest request) throws IOException {
+    public ResponseEntity<B2BUnitDTO> createB2BUnit( @RequestBody B2BUnitRequest request) throws IOException {
         B2BUnitDTO response = b2BUnitService.createOrUpdate(request);
         return ResponseEntity.ok(response);
     }

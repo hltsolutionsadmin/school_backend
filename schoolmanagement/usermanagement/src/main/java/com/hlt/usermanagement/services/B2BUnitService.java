@@ -7,8 +7,6 @@ import com.hlt.usermanagement.dto.B2BUnitStatusDTO;
 import com.hlt.usermanagement.dto.request.B2BUnitRequest;
 import com.hlt.usermanagement.dto.response.B2BUnitListResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.io.IOException;
 import java.util.List;
 

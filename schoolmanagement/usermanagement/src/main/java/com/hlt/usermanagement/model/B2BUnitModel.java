@@ -27,7 +27,7 @@ public class B2BUnitModel extends AuditableModel {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "admin_user_id",
-            nullable = false,
+            nullable = true,
             foreignKey = @ForeignKey(name = "fk_b2bunit_admin")
     )
     private UserModel admin;

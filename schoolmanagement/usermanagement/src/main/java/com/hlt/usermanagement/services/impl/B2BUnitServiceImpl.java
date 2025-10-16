@@ -1,6 +1,4 @@
 package com.hlt.usermanagement.services.impl;
-
-
 import com.hlt.usermanagement.dto.AddressDTO;
 import com.hlt.usermanagement.dto.B2BUnitDTO;
 import com.hlt.usermanagement.dto.B2BUnitStatusDTO;
@@ -93,7 +91,7 @@ public class B2BUnitServiceImpl  implements B2BUnitService {
         }
     }
 
-    private BasicOnboardUserDTO buildBasicOnboardUserDTO(B2BUnitRequest request, Long businessId) {
+    private BasicOnboardUserDTO  buildBasicOnboardUserDTO(B2BUnitRequest request, Long businessId) {
         return BasicOnboardUserDTO.builder()
                 .username(request.getAdminUsername())
                 .email(request.getAdminEmail())
@@ -113,10 +111,8 @@ public class B2BUnitServiceImpl  implements B2BUnitService {
         Optional.ofNullable(request.getEnabled()).ifPresent(unit::setEnabled);
         Optional.ofNullable(request.getTemporarilyClosed()).ifPresent(unit::setTemporarilyClosed);
     }
-
     private void populateAddress(B2BUnitModel unit, B2BUnitRequest request) {
         AddressModel address = Optional.ofNullable(unit.getBusinessAddress()).orElseGet(AddressModel::new);
-
         Optional.ofNullable(request.getAddressLine1()).ifPresent(address::setAddressLine1);
         Optional.ofNullable(request.getStreet()).ifPresent(address::setStreet);
         Optional.ofNullable(request.getCity()).ifPresent(address::setCity);
@@ -180,9 +176,6 @@ public class B2BUnitServiceImpl  implements B2BUnitService {
 
         return b2bUnits.map(this::mapToB2BUnitListResponse);
     }
-
-
-
     private B2BUnitListResponse mapToB2BUnitListResponse(B2BUnitModel model) {
         B2BUnitListResponse response = new B2BUnitListResponse();
 

@@ -163,7 +163,7 @@ public class UserController {
                 request.getFullName(),
                 request.getPrimaryContact(),
                 request.getUserRoles(),
-                request.getSchoolId()
+                request.getB2bUnitId()
         );
 
         return ResponseEntity.ok(

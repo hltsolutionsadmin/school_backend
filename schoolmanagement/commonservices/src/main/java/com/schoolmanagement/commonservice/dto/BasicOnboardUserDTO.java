@@ -34,7 +34,7 @@ public class BasicOnboardUserDTO {
 
     private final Set<ERole> userRoles;
 
-    private final Long schoolId;
+    private final Long b2bUnitId;
 
     @NotBlank(message = "Password is mandatory")
     private final String password;
@@ -46,14 +46,14 @@ public class BasicOnboardUserDTO {
             @JsonProperty("fullName") String fullName,
             @JsonProperty("primaryContact") String primaryContact,
             @JsonProperty("userRoles") Set<ERole> userRoles,
-            @JsonProperty("schoolId") Long schoolId,
+            @JsonProperty("schoolId") Long b2bUnitId,
             @JsonProperty("password") String password) {
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.primaryContact = primaryContact;
         this.userRoles = userRoles;
-        this.schoolId = schoolId;
+        this.b2bUnitId = b2bUnitId;
         this.password = password;
     }
 }

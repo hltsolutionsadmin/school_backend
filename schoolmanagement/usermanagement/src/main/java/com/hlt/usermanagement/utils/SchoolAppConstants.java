@@ -27,6 +27,15 @@ public final class SchoolAppConstants {
     public static final String DIARY_ENTRY_DELETE_SUCCESS = "Diary entry deleted successfully.";
     public static final String DIARY_ENTRY_NOT_FOUND = "Diary entry not found.";
 
+    public static final String GRIEVANCE_CREATE_SUCCESS = "Grievance created successfully";
+    public static final String GRIEVANCE_UPDATE_SUCCESS = "Grievance updated successfully";
+    public static final String GRIEVANCE_FETCH_SUCCESS = "Grievance fetched successfully";
+    public static final String GRIEVANCE_DELETE_SUCCESS = "Grievance deleted successfully";
+    public static final String GRIEVANCE_FETCH_ALL_SUCCESS = "Fetched all grievances successfully";
+    public static final String GRIEVANCE_FETCH_BY_TYPE_SUCCESS = "Fetched grievances by type successfully";
+    public static final String GRIEVANCE_FETCH_BY_STATUS_SUCCESS = "Fetched grievances by status successfully";
+    public static final String GRIEVANCE_TYPES_FETCH_SUCCESS = "Fetched grievance types successfully";
+
 
 
     public static final String HOMEWORK_CREATE_SUCCESS = "Homework created successfully";

@@ -1,17 +1,18 @@
 package com.hlt.usermanagement.model;
 
+import com.hlt.usermanagement.dto.TaskType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "homework")
+@Table(name = "tasks")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HomeworkModel extends AuditableModel {
+public class TaskModel extends AuditableModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,10 @@ public class HomeworkModel extends AuditableModel {
 
     @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TASK_TYPE", nullable = false)
+    private TaskType taskType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "academic_id", nullable = false)

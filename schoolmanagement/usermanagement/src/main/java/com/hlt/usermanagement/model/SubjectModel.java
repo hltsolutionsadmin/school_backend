@@ -19,7 +19,7 @@ public class SubjectModel extends GenericModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLASS_ID", nullable = false)
-    private AcademicUnitModel classModel;
+    private AcademicModel classModel;
 
     @ManyToMany
     @JoinTable(

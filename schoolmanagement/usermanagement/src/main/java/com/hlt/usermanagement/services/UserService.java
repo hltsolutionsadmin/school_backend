@@ -21,7 +21,7 @@ public interface UserService {
 
     UserModel saveUser(UserModel userModel);
 
-    Long onBoardUserWithCredentials(BasicOnboardUserDTO dto);
+    Long  onBoardUserWithCredentials(BasicOnboardUserDTO dto);
 
     void updateUser(final UserUpdateDTO details, final Long userId);
 

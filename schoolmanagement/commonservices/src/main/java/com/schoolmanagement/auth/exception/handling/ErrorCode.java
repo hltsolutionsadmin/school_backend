@@ -13,6 +13,9 @@ public enum ErrorCode {
     HOMEWORK_NOT_FOUND(2001, "Homework not found", HttpStatus.NOT_FOUND),
     HOMEWORK_ALREADY_EXISTS(2002, "Homework already exists", HttpStatus.BAD_REQUEST),
     INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
+    ACADEMIC_NOT_FOUND(2001, "Academic unit not found", HttpStatus.NOT_FOUND),
+    TASK_NOT_FOUND(3001, "Task not found", HttpStatus.NOT_FOUND),
+    EVENT_NOT_FOUND(2001, "Academic event not found", HttpStatus.NOT_FOUND),
 
     EMAIL_ALREADY_IN_USE(1002, "Email Is Already In Use", HttpStatus.CONFLICT),
     UNAUTHORIZED(1003, "Unauthorized Access", HttpStatus.UNAUTHORIZED),

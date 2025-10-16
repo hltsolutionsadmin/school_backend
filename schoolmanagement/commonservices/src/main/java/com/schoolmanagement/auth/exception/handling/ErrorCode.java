@@ -63,6 +63,8 @@ public enum ErrorCode {
     // General Exceptions (2000–2099)
     // ===========================
     NOT_FOUND(2000, "Requested Resource Not Found", HttpStatus.NOT_FOUND),
+    DATA_NOT_FOUND(2000, "Requested data Not Found", HttpStatus.NOT_FOUND),
+
     BAD_REQUEST(2000, "Bad Request", HttpStatus.BAD_REQUEST),
     INTERNAL_SERVER_ERROR(2001, "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR),
     FORBIDDEN(2002, "Forbidden", HttpStatus.FORBIDDEN),

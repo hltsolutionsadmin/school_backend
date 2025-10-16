@@ -2,6 +2,7 @@ package com.hlt.usermanagement.model;
 
 import com.hlt.usermanagement.dto.enums.BusinessType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

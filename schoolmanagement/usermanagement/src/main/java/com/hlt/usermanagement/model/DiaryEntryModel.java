@@ -1,30 +1,42 @@
 package com.hlt.usermanagement.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "DIARY_ENTRY")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "diary_entries")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DiaryEntryModel extends AuditableModel {
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "STUDENT_ID", nullable = false)
-    private UserModel student;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "TITLE", nullable = false)
+    private String title;
 
+    @Column(name = "DESCRIPTION", columnDefinition = "TEXT")
+    private String description;
 
-    @Column(name = "SUBJECT", nullable = false, length = 100)
-    private String subject;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "academic_id", nullable = false)
+    private AcademicModel academic;
 
-    @Column(name = "NOTE", columnDefinition = "TEXT")
-    private String note;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "initiated_by_user_id", nullable = false)
+    private UserModel initiatedBy;
 
-    @Column(name = "ENTRY_DATE", nullable = false)
-    private LocalDate entryDate;
+    @Column(name = "ACTIVE", nullable = false)
+    private Boolean active = true;
+
+    @Column(name = "ATTACHMENT_URL")
+    private String attachmentUrl;
+
+    @Column(name = "PRIORITY")
+    private Integer priority;
 }

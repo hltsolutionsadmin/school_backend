@@ -2,9 +2,10 @@ package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.dto.AcademicEventDTO;
 import com.hlt.usermanagement.model.AcademicEventModel;
+import com.hlt.usermanagement.model.AcademicModel;
 import com.hlt.usermanagement.populator.AcademicEventPopulator;
 import com.hlt.usermanagement.repository.AcademicEventRepository;
-import com.hlt.usermanagement.repository.AcademicUnitRepository;
+import com.hlt.usermanagement.repository.AcademicRepository;
 import com.hlt.usermanagement.services.AcademicEventService;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
 import com.schoolmanagement.auth.exception.handling.HltCustomerException;
@@ -22,12 +23,12 @@ import java.time.LocalDateTime;
 public class AcademicEventServiceImpl implements AcademicEventService {
 
     private final AcademicEventRepository academicEventRepository;
-    private final AcademicUnitRepository academicUnitRepository;
+    private final AcademicRepository academicUnitRepository;
     private final AcademicEventPopulator academicEventPopulator;
 
     @Override
     public AcademicEventDTO createEvent(AcademicEventDTO dto) {
-        AcademicUnitModel academicUnit = academicUnitRepository.findById(dto.getAcademicUnitId())
+        AcademicModel academicUnit = academicUnitRepository.findById(dto.getAcademicUnitId())
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         AcademicEventModel model = new AcademicEventModel();
@@ -48,7 +49,7 @@ public class AcademicEventServiceImpl implements AcademicEventService {
         AcademicEventModel existing = academicEventRepository.findById(id)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.EVENT_NOT_FOUND));
 
-        AcademicUnitModel academicUnit = academicUnitRepository.findById(dto.getAcademicUnitId())
+        AcademicModel academicUnit = academicUnitRepository.findById(dto.getAcademicUnitId())
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         existing.setAcademicUnit(academicUnit);

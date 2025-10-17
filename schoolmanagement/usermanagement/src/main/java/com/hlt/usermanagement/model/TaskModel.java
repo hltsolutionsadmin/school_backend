@@ -1,6 +1,6 @@
 package com.hlt.usermanagement.model;
 
-import com.hlt.usermanagement.dto.TaskType;
+import com.hlt.usermanagement.dto.enums.TaskType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

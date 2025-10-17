@@ -1,6 +1,7 @@
 package com.hlt.usermanagement.controllers;
 
 import com.hlt.usermanagement.dto.AcademicDTO;
+import com.hlt.usermanagement.dto.AcademicUserDTO;
 import com.hlt.usermanagement.dto.AssignUserDTO;
 import com.hlt.usermanagement.services.AcademicService;
 import com.schoolmanagement.commonservice.dto.StandardResponse;
@@ -45,13 +46,14 @@ public class AcademicController {
     }
 
     @GetMapping("/{academicId}/users")
-    public StandardResponse<Page<AcademicDTO>> getUsersInAcademic(
+    public StandardResponse<Page<AcademicUserDTO>> getUsersInAcademic(
             @PathVariable Long academicId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<AcademicDTO> users = academicService.getUsersInAcademic(academicId, pageable);
+        Page<AcademicUserDTO> users = academicService.getUsersInAcademic(academicId, pageable);
         return StandardResponse.page("Users in academic retrieved successfully", users);
     }
+
 }

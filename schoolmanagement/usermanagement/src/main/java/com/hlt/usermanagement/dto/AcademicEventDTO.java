@@ -1,5 +1,6 @@
 package com.hlt.usermanagement.dto;
 
+import com.hlt.usermanagement.dto.enums.AcademicEventType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

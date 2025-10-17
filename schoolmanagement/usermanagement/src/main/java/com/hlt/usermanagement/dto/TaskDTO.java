@@ -1,5 +1,6 @@
 package com.hlt.usermanagement.dto;
 
+import com.hlt.usermanagement.dto.enums.TaskType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

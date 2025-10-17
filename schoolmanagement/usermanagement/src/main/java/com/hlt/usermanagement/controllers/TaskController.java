@@ -1,7 +1,7 @@
 package com.hlt.usermanagement.controllers;
 
 import com.hlt.usermanagement.dto.TaskDTO;
-import com.hlt.usermanagement.dto.TaskType;
+import com.hlt.usermanagement.dto.enums.TaskType;
 import com.hlt.usermanagement.services.TaskService;
 import com.schoolmanagement.commonservice.dto.StandardResponse;
 import jakarta.validation.Valid;

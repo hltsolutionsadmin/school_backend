@@ -2,6 +2,7 @@ package com.hlt.usermanagement.populator;
 
 import com.hlt.usermanagement.dto.AcademicEventDTO;
 import com.hlt.usermanagement.model.AcademicEventModel;
+import com.hlt.usermanagement.model.AcademicModel;
 import com.schoolmanagement.utils.Populator;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class AcademicEventPopulator implements Populator<AcademicEventModel, Aca
         target.setDetails(source.getDetails());
     }
 
-    public AcademicEventModel toModel(AcademicEventDTO dto, AcademicUnitModel academicUnit) {
+    public AcademicEventModel toModel(AcademicEventDTO dto, AcademicModel academicUnit) {
         if (dto == null) return null;
         AcademicEventModel model = new AcademicEventModel();
         model.setAcademicUnit(academicUnit);

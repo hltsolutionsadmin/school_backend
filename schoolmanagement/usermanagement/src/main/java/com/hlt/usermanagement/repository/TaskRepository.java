@@ -1,5 +1,5 @@
 package com.hlt.usermanagement.repository;
-import com.hlt.usermanagement.dto.TaskType;
+import com.hlt.usermanagement.dto.enums.TaskType;
 import com.hlt.usermanagement.model.TaskModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

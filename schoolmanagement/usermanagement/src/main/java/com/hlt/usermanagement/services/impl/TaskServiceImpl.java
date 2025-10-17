@@ -1,7 +1,7 @@
 package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.dto.TaskDTO;
-import com.hlt.usermanagement.dto.TaskType;
+import com.hlt.usermanagement.dto.enums.TaskType;
 import com.hlt.usermanagement.model.TaskModel;
 import com.hlt.usermanagement.populator.TaskPopulator;
 import com.hlt.usermanagement.repository.TaskRepository;

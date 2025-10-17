@@ -1,7 +1,7 @@
 package com.hlt.usermanagement.services;
 
 import com.hlt.usermanagement.dto.TaskDTO;
-import com.hlt.usermanagement.dto.TaskType;
+import com.hlt.usermanagement.dto.enums.TaskType;
 import org.springframework.data.domain.Page;
 
 public interface TaskService {

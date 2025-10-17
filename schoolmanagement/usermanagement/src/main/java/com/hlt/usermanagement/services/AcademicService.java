@@ -1,6 +1,7 @@
 package com.hlt.usermanagement.services;
 
 import com.hlt.usermanagement.dto.AcademicDTO;
+import com.hlt.usermanagement.dto.AcademicUserDTO;
 import com.hlt.usermanagement.dto.AssignUserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,6 @@ public interface AcademicService {
 
     void assignUsers(Long academicId, AssignUserDTO dto);
 
-    Page<AcademicDTO> getUsersInAcademic(Long academicId, Pageable pageable);
+   Page<AcademicUserDTO> getUsersInAcademic(Long academicId, Pageable pageable);
+
 }

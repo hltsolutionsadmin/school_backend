@@ -1,6 +1,7 @@
 package com.hlt.usermanagement.services.impl;
 
 import com.hlt.usermanagement.dto.AcademicDTO;
+import com.hlt.usermanagement.dto.AcademicUserDTO;
 import com.hlt.usermanagement.dto.AssignUserDTO;
 
 import com.hlt.usermanagement.model.AcademicModel;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class AcademicServiceImpl implements AcademicService {
 
     private final AcademicRepository academicRepository;
-    private final AcademicUserMappingRepository mappingRepository;
+    private final AcademicUserMappingRepository academicUserMappingRepository;
     private final UserRepository userRepository;
     private final AcademicPopulator academicPopulator;
 
@@ -86,29 +87,33 @@ public class AcademicServiceImpl implements AcademicService {
                         .build())
                 .collect(Collectors.toList());
 
-        mappingRepository.saveAll(mappings);
+        academicUserMappingRepository.saveAll(mappings);
     }
 
     @Override
-    public Page<AcademicDTO> getUsersInAcademic(Long academicId, Pageable pageable) {
-        List<AcademicUserMapping> mappings = mappingRepository.findByAcademicId(academicId);
-        List<UserModel> users = mappings.stream()
-                .map(m -> userRepository.findById(m.getUserId())
-                        .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND)))
+    public Page<AcademicUserDTO> getUsersInAcademic(Long academicId, Pageable pageable) {
+        Page<AcademicUserMapping> mappingsPage = academicUserMappingRepository.findByAcademicId(academicId, pageable);
+        List<AcademicUserMapping> mappings = mappingsPage.getContent();
+
+        List<Long> userIds = mappings.stream()
+                .map(AcademicUserMapping::getUserId)
                 .collect(Collectors.toList());
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), users.size());
+        List<UserModel> users = userRepository.findAllById(userIds);
+        if (users.isEmpty()) {
+            throw new HltCustomerException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        List<AcademicDTO> dtos = users.subList(start, end).stream()
-                .map(u -> {
-                    AcademicDTO dto = new AcademicDTO();
-                    dto.setId(u.getId());
-                    dto.setName(u.getFullName());
-                    return dto;
-                })
+        List<AcademicUserDTO> dtos = users.stream()
+                .map(u -> AcademicUserDTO.builder()
+                        .userId(u.getId())
+                        .fullName(u.getFullName())
+                        .email(u.getEmail())
+                        .build())
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(dtos, pageable, users.size());
+        return new PageImpl<>(dtos, pageable, mappingsPage.getTotalElements());
     }
+
+
 }

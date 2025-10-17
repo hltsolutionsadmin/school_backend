@@ -1,4 +1,4 @@
-package com.hlt.usermanagement.dto;
+package com.hlt.usermanagement.dto.enums;
 
 public enum TaskType {
     HOMEWORK,

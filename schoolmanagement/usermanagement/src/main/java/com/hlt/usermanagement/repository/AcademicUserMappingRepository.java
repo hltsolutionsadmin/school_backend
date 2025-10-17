@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AcademicUserMappingRepository extends JpaRepository<AcademicUserMapping, Long> {
 
-    List<AcademicUserMapping> findByAcademicId(Long academicId);
+    Page<AcademicUserMapping> findByAcademicId(Long academicId,Pageable pageable);
 
     Page<AcademicUserMapping> findByUserId(Long userId, Pageable pageable);
 

@@ -1,6 +1,6 @@
 package com.hlt.usermanagement.model;
 
-import com.hlt.usermanagement.dto.AcademicEventType;
+import com.hlt.usermanagement.dto.enums.AcademicEventType;
 import jakarta.persistence.*;
 import lombok.*;
 

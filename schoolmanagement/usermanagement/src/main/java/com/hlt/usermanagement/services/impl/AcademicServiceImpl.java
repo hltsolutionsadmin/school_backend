@@ -80,9 +80,9 @@ public class AcademicServiceImpl implements AcademicService {
         }
 
         List<AcademicUserMapping> mappings = users.stream()
-                .map(u -> AcademicUserMapping.builder()
-                        .academicId(academicId)
-                        .userId(u.getId())
+                .map(user -> AcademicUserMapping.builder()
+                        .academic(academic)
+                        .user(user)
                         .role(dto.getRole())
                         .build())
                 .collect(Collectors.toList());
@@ -90,30 +90,33 @@ public class AcademicServiceImpl implements AcademicService {
         academicUserMappingRepository.saveAll(mappings);
     }
 
+
     @Override
     public Page<AcademicUserDTO> getUsersInAcademic(Long academicId, Pageable pageable) {
-        Page<AcademicUserMapping> mappingsPage = academicUserMappingRepository.findByAcademicId(academicId, pageable);
-        List<AcademicUserMapping> mappings = mappingsPage.getContent();
+        AcademicModel academic = academicRepository.findById(academicId)
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.BUSINESS_NOT_FOUND));
 
-        List<Long> userIds = mappings.stream()
-                .map(AcademicUserMapping::getUserId)
-                .collect(Collectors.toList());
+        Page<AcademicUserMapping> mappingsPage = academicUserMappingRepository.findByAcademic(academic, pageable);
 
-        List<UserModel> users = userRepository.findAllById(userIds);
-        if (users.isEmpty()) {
+        if (mappingsPage.isEmpty()) {
             throw new HltCustomerException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<AcademicUserDTO> dtos = users.stream()
-                .map(u -> AcademicUserDTO.builder()
-                        .userId(u.getId())
-                        .fullName(u.getFullName())
-                        .email(u.getEmail())
-                        .build())
+        List<AcademicUserDTO> dtos = mappingsPage.getContent().stream()
+                .map(mapping -> {
+                    UserModel user = mapping.getUser();
+                    return AcademicUserDTO.builder()
+                            .userId(user.getId())
+                            .fullName(user.getFullName())
+                            .email(user.getEmail())
+                            .role(mapping.getRole())
+                            .build();
+                })
                 .collect(Collectors.toList());
 
         return new PageImpl<>(dtos, pageable, mappingsPage.getTotalElements());
     }
+
 
 
 }

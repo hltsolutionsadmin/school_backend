@@ -131,7 +131,7 @@ public class SubjectServiceImpl implements SubjectService {
         dto.setName(subject.getName());
         dto.setCode(subject.getCode());
         dto.setClassId(subject.getClassModel().getId());
-        dto.setClassName(subject.getClassModel().getClassName());
+//        dto.setClassName(subject.getClassModel().getClassName());
         dto.setSection(subject.getClassModel().getSection());
 
 

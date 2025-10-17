@@ -1,5 +1,6 @@
 package com.hlt.usermanagement.repository;
 
+import com.hlt.usermanagement.model.AcademicModel;
 import com.hlt.usermanagement.model.AcademicUserMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +12,12 @@ import java.util.List;
 @Repository
 public interface AcademicUserMappingRepository extends JpaRepository<AcademicUserMapping, Long> {
 
-    Page<AcademicUserMapping> findByAcademicId(Long academicId,Pageable pageable);
 
     Page<AcademicUserMapping> findByUserId(Long userId, Pageable pageable);
 
     Page<AcademicUserMapping> findByAcademicIdAndRole(Long academicId, String role, Pageable pageable);
 
     void deleteByAcademicIdAndUserId(Long academicId, Long userId);
+
+    Page<AcademicUserMapping> findByAcademic(AcademicModel academic, Pageable pageable);
 }

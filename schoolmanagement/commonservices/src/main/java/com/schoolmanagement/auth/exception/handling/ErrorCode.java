@@ -16,7 +16,6 @@ public enum ErrorCode {
     ACADEMIC_NOT_FOUND(2001, "Academic unit not found", HttpStatus.NOT_FOUND),
     TASK_NOT_FOUND(3001, "Task not found", HttpStatus.NOT_FOUND),
     EVENT_NOT_FOUND(2001, "Academic event not found", HttpStatus.NOT_FOUND),
-
     EMAIL_ALREADY_IN_USE(1002, "Email Is Already In Use", HttpStatus.CONFLICT),
     UNAUTHORIZED(1003, "Unauthorized Access", HttpStatus.UNAUTHORIZED),
     INVALID_ROLE(1007, "Invalid role provided", HttpStatus.BAD_REQUEST),
@@ -26,6 +25,7 @@ public enum ErrorCode {
     SCHOOL_NOT_FOUND(2001, "School not found", HttpStatus.NOT_FOUND),
     SCHOOL_ALREADY_EXISTS(2002, "School already exists", HttpStatus.BAD_REQUEST),
     SCHOOL_CODE_ALREADY_IN_USE(2003, "School code already in use", HttpStatus.BAD_REQUEST),
+    DIARY_ENTRY_NOT_FOUND(2001, "Diary entry not found", HttpStatus.NOT_FOUND),
 
     // Class related errors
     CLASS_NOT_FOUND(3001, "Class not found", HttpStatus.NOT_FOUND),

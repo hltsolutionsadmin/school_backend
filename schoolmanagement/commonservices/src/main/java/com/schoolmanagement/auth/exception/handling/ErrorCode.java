@@ -26,7 +26,9 @@ public enum ErrorCode {
     SCHOOL_ALREADY_EXISTS(2002, "School already exists", HttpStatus.BAD_REQUEST),
     SCHOOL_CODE_ALREADY_IN_USE(2003, "School code already in use", HttpStatus.BAD_REQUEST),
     DIARY_ENTRY_NOT_FOUND(2001, "Diary entry not found", HttpStatus.NOT_FOUND),
-
+    FEES_NOT_FOUND(2001, "Fee details not found", HttpStatus.NOT_FOUND),
+    TIMETABLE_NOT_FOUND(1005, "Exam timetable not found", HttpStatus.NOT_FOUND),
+    EXAM_NOT_FOUND(1002, "Exam not found", HttpStatus.NOT_FOUND),
     // Class related errors
     CLASS_NOT_FOUND(3001, "Class not found", HttpStatus.NOT_FOUND),
     CLASS_ALREADY_EXISTS(3002, "Class already exists", HttpStatus.BAD_REQUEST),

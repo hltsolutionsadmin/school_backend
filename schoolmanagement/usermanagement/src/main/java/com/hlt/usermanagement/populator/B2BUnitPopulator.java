@@ -20,8 +20,6 @@ public class B2BUnitPopulator implements Populator<B2BUnitModel, B2BUnitDTO> {
 	@Autowired
 	private AddressPopulator addressPopulator;
 
-
-
 	public B2BUnitDTO toDTO(B2BUnitModel source) {
 		if (source == null)
 			return null;

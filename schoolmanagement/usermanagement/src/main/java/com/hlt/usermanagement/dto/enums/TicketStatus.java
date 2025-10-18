@@ -1,6 +1,6 @@
 package com.hlt.usermanagement.dto.enums;
 
-public enum CommunicationStatus {
+public enum TicketStatus {
     PENDING,
     IN_PROGRESS,
     RESOLVED

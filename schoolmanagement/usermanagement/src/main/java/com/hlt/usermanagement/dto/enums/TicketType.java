@@ -1,6 +1,6 @@
 package com.hlt.usermanagement.dto.enums;
 
-public enum CommunicationType {
+public enum TicketType {
     COMPLAINT,
     SUGGESTION,
     NOTICE

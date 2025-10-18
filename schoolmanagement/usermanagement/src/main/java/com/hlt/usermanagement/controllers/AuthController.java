@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.hlt.usermanagement.repository.RoleRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +56,7 @@ public class AuthController extends SRBaseEndpoint {
     private final RoleService roleService;
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RoleRepository roleRepository;
 
     @PostMapping("/login")
     public ResponseEntity<Object> generateJwt(@Valid @RequestBody LoginRequest loginRequest) throws JsonProcessingException {
@@ -107,11 +109,8 @@ public class AuthController extends SRBaseEndpoint {
     @PostMapping("/register")
     public ResponseEntity<StandardResponse<String>> registerUser(@Valid @RequestBody UsernameLoginRequest request) {
         log.info("Registering user: {}", request.getUsername());
-
-        // 1. Validate uniqueness for username, email, contact
         validateUserUniqueness(request.getUsername(), request.getPrimaryContact(), request.getEmail());
 
-        // 2. Build user with encrypted fields (handled by @Convert)
         UserModel newUser = new UserModel();
         newUser.setUsername(request.getUsername());
         newUser.setPassword(request.getPassword());
@@ -120,16 +119,19 @@ public class AuthController extends SRBaseEndpoint {
         newUser.setEmailHash(DigestUtils.sha256Hex(request.getEmail().trim().toLowerCase()));
         newUser.setPrimaryContact(request.getPrimaryContact());
         newUser.setPrimaryContactHash(DigestUtils.sha256Hex(request.getPrimaryContact()));
+        newUser.setRoles(fetchRoles(request.getUserRoles()));
 
-        // 3. Assign default role
-        RoleModel userRole = roleService.findByErole(ERole.ROLE_USER);
-        newUser.setRoles(Set.of(userRole));
-
-        // 4. Save user (encryption handled by JPA layer)
         userService.saveUser(newUser);
 
-        // 5. Return response
         return ResponseEntity.ok(StandardResponse.message("User registered successfully"));
+    }
+
+    private Set<RoleModel> fetchRoles(Set<ERole> roles) {
+        Set<RoleModel> assignedRoles = roleRepository.findByNameIn(roles);
+        if (assignedRoles == null || assignedRoles.isEmpty()) {
+            throw new HltCustomerException(ErrorCode.INVALID_ROLE);
+        }
+        return assignedRoles;
     }
 
 

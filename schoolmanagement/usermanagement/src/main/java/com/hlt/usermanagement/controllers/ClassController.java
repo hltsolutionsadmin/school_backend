@@ -1,22 +1,8 @@
 package com.hlt.usermanagement.controllers;
 
-import com.hlt.usermanagement.dto.ClassDTO;
-import com.hlt.usermanagement.dto.StudentDTO;
-import com.hlt.usermanagement.dto.SubjectDTO;
-import com.hlt.usermanagement.services.ClassService;
-import com.hlt.usermanagement.utils.SchoolAppConstants;
-import com.schoolmanagement.commonservice.dto.StandardResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/classes")

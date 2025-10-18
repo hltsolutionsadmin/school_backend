@@ -64,23 +64,9 @@ public class AcademicResourceAssignmentServiceImpl implements AcademicResourceAs
         return academicResourceAssignmentPopulator.toDTO(saved);
     }
 
-    /** Activate an assignment */
-    public AcademicResourceAssignmentDTO activateAssignment(Long assignmentId) {
-        AcademicResourceAssignmentModel model = academicResourceAssignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new HltCustomerException(ErrorCode.ASSIGNMENT_NOT_FOUND));
-        model.setActive(true);
-        return academicResourceAssignmentPopulator.toDTO(academicResourceAssignmentRepository.save(model));
-    }
 
-    /** Deactivate an assignment */
-    public AcademicResourceAssignmentDTO deactivateAssignment(Long assignmentId) {
-        AcademicResourceAssignmentModel model = academicResourceAssignmentRepository.findById(assignmentId)
-                .orElseThrow(() -> new HltCustomerException(ErrorCode.ASSIGNMENT_NOT_FOUND));
-        model.setActive(false);
-        return academicResourceAssignmentPopulator.toDTO(academicResourceAssignmentRepository.save(model));
-    }
-
-    /// Check if a resource is cjurently available for a given subject  acadeemic unit
+    //TODO add functionality  after
+    // Check if a resource is cjurently available for a given subject  acadeemic unit
     public boolean isResourceAvailable(Long resourceId, Long subjectId, Long academicId, LocalTime checkTime) {
         AcademicResourceAssignmentModel assignment = academicResourceAssignmentRepository
                 .findByResourceIdAndSubjectIdAndAcademicIdAndActiveTrue(resourceId, subjectId, academicId)

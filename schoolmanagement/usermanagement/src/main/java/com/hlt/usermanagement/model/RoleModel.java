@@ -29,6 +29,7 @@ public class RoleModel {
     @Column(name = "ID", nullable = false, updatable = false)
     private Long id;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "NAME", length = 50, nullable = false, unique = true)
     private ERole name;

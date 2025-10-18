@@ -23,6 +23,9 @@ public class ExamModel extends AuditableModel {
     private String name;
 
     @ManyToOne(optional = false)
+    private UserModel userModel;
+
+    @ManyToOne(optional = false)
     private AcademicModel academic;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)

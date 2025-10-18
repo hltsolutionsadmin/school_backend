@@ -17,8 +17,8 @@ import java.util.Set;
                 @UniqueConstraint(name = "uk_b2bunit_business_code", columnNames = {"business_code"})
         },
         indexes = {
-                @Index(name = "idx_b2bunit_admin", columnList = "admin_user_id"),
-                @Index(name = "idx_b2bunit_category", columnList = "category_id")
+                @Index(name = "idx_b2bunit_admin", columnList = "admin_user_id")
+
         }
 )
 @Getter

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Component
 public class AcademicResourceAssignmentPopulator implements Populator<AcademicResourceAssignmentModel, AcademicResourceAssignmentDTO> {
 
-    // Model → DTO
     @Override
     public void populate(AcademicResourceAssignmentModel source, AcademicResourceAssignmentDTO target) {
         if (source == null || target == null) return;
@@ -45,7 +44,6 @@ public class AcademicResourceAssignmentPopulator implements Populator<AcademicRe
         return dto;
     }
 
-    // DTO → Model
     public AcademicResourceAssignmentModel toModel(AcademicResourceAssignmentDTO dto) {
         if (dto == null) return null;
         AcademicResourceAssignmentModel model = new AcademicResourceAssignmentModel();

@@ -4,17 +4,15 @@ import com.hlt.usermanagement.dto.SubjectDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface SubjectService {
 
-    SubjectDTO addSubject(SubjectDTO subjectDTO);
+    SubjectDTO createSubject(SubjectDTO dto);
 
-    SubjectDTO updateSubject(Long id, SubjectDTO subjectDTO);
+    SubjectDTO updateSubject(Long id, SubjectDTO dto);
 
     SubjectDTO getSubjectById(Long id);
 
-    void deleteSubject(Long id);
+    Page<SubjectDTO> getSubjects(Long b2bUnitId, Pageable pageable);
 
-    Page<SubjectDTO> getSubjectsByClass(Long classId, Pageable pageable);
+    void deleteSubject(Long id);
 }

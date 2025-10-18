@@ -1,6 +1,7 @@
 package com.hlt.usermanagement.repository;
 
 import com.hlt.usermanagement.model.ExamTimetableModel;
+import com.hlt.usermanagement.model.SubjectModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +13,5 @@ public interface ExamTimetableRepository extends JpaRepository<ExamTimetableMode
 
     List<ExamTimetableModel> findByExam_Id(Long examId);
 
-    Optional<ExamTimetableModel> findByExam_IdAndSubject(Long examId, String subject);
+    Optional<ExamTimetableModel> findByExam_IdAndSubject(Long examId, SubjectModel subject);
 }

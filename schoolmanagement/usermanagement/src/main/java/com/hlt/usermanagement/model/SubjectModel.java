@@ -3,29 +3,29 @@ package com.hlt.usermanagement.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "SUBJECT")
+@Table(name = "subjects")
 @Getter
 @Setter
 public class SubjectModel extends GenericModel {
-    @Column(name = "NAME", nullable = false)
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "CODE", nullable = false, unique = true)
+    @Column(name = "code", length = 20, unique = true)
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLASS_ID", nullable = false)
-    private AcademicModel classModel;
+    @Column(name = "description", length = 500)
+    private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "SUBJECT_TEACHERS",
-            joinColumns = @JoinColumn(name = "SUBJECT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "TEACHER_ID")
-    )
-    private Set<UserModel> teachers = new HashSet<>();
+    @Column(name = "credits")
+    private Integer credits;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "b2b_unit_id", nullable = false)
+    private B2BUnitModel b2bUnit;
 }

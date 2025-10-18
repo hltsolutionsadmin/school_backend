@@ -1,4 +1,5 @@
 package com.hlt.usermanagement.dto;
+import com.hlt.usermanagement.model.SubjectModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class ExamTimetableDTO {
     private Long examId;
 
     @NotBlank(message = "Subject is required")
-    private String subject;
+    private SubjectModel subject;
 
     @NotNull(message = "Start time is required")
     private LocalDateTime startTime;

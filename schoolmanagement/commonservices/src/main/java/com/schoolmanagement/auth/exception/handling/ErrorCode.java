@@ -13,6 +13,7 @@ public enum ErrorCode {
     HOMEWORK_NOT_FOUND(2001, "Homework not found", HttpStatus.NOT_FOUND),
     RESULT_NOT_FOUND(1003, "Result not found", HttpStatus.NOT_FOUND),
     ASSIGNMENT_NOT_FOUND(2001, "Academic resource assignment not found", HttpStatus.NOT_FOUND),
+    COMMUNICATION_NOT_FOUND(1002, "Communication not found", HttpStatus.NOT_FOUND),
 
     INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
     ACADEMIC_NOT_FOUND(2001, "Academic unit not found", HttpStatus.NOT_FOUND),

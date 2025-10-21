@@ -4,6 +4,7 @@ import com.schoolmanagement.commonservice.enums.ERole;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,5 +22,5 @@ public class UsernameLoginRequest {
     @NotBlank
     private String password;
 
-    private final Set<ERole> userRoles;
+    private Set<ERole> userRoles = new HashSet<>();
 }

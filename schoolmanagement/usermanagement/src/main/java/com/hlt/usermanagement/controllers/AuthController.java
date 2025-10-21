@@ -107,7 +107,7 @@ public class AuthController extends SRBaseEndpoint {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<StandardResponse<String>> registerUser(@Valid @RequestBody UsernameLoginRequest request) {
+    public ResponseEntity<StandardResponse<String>> registerUser( @RequestBody UsernameLoginRequest request) {
         log.info("Registering user: {}", request.getUsername());
         validateUserUniqueness(request.getUsername(), request.getPrimaryContact(), request.getEmail());
 

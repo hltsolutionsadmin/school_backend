@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum BusinessType {
 
     // Education
+    SCHOOL("SCH", "School"),
     COLLEGE("CLG", "College"),
     INSTITUTE("INST", "Institute"),
     UNIVERSITY("UNI", "University"),

@@ -17,6 +17,12 @@ public class TicketDTO {
     @NotNull(message = "CreatedBy user ID is required")
     private Long createdById;
 
+    private Long userId;
+
+    private Long academicId;
+
+    private Long b2bUnitId;
+
     @NotNull(message = "Ticket type is required")
     private TicketType type;
 

@@ -14,6 +14,10 @@ public enum ErrorCode {
     RESULT_NOT_FOUND(1003, "Result not found", HttpStatus.NOT_FOUND),
     ASSIGNMENT_NOT_FOUND(2001, "Academic resource assignment not found", HttpStatus.NOT_FOUND),
     COMMUNICATION_NOT_FOUND(1002, "Communication not found", HttpStatus.NOT_FOUND),
+    TICKET_NOT_FOUND(2001, "Ticket not found", HttpStatus.NOT_FOUND),
+    INVALID_TICKET_TYPE(2002, "Invalid ticket type", HttpStatus.BAD_REQUEST),
+    INVALID_TICKET_STATUS(2003, "Invalid ticket status", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST(2004, "Invalid request data", HttpStatus.BAD_REQUEST),
 
     INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
     ACADEMIC_NOT_FOUND(2001, "Academic unit not found", HttpStatus.NOT_FOUND),

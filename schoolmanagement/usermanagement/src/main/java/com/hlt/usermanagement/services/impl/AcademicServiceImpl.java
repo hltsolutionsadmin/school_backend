@@ -11,6 +11,7 @@ import com.hlt.usermanagement.model.UserModel;
 import com.hlt.usermanagement.populator.AcademicPopulator;
 import com.hlt.usermanagement.repository.AcademicRepository;
 import com.hlt.usermanagement.repository.AcademicUserMappingRepository;
+import com.hlt.usermanagement.repository.B2BUnitRepository;
 import com.hlt.usermanagement.repository.UserRepository;
 import com.hlt.usermanagement.services.AcademicService;
 import com.schoolmanagement.auth.exception.handling.ErrorCode;
@@ -30,11 +31,13 @@ public class AcademicServiceImpl implements AcademicService {
     private final AcademicUserMappingRepository academicUserMappingRepository;
     private final UserRepository userRepository;
     private final AcademicPopulator academicPopulator;
+    private final B2BUnitRepository b2bUnitRepository;
 
     @Override
     public AcademicDTO createAcademic(AcademicDTO dto) {
         AcademicModel model = new AcademicModel();
-
+        B2BUnitModel b2bUnit = b2bUnitRepository.findById(dto.getB2bUnitId())
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.BUSINESS_NOT_FOUND));
         model.setName(dto.getName());
         model.setCode(dto.getCode());
         model.setDescription(dto.getDescription());
@@ -48,12 +51,7 @@ public class AcademicServiceImpl implements AcademicService {
         model.setTeacherCount(dto.getTeacherCount());
         model.setNotes(dto.getNotes());
 
-        if (dto.getB2bUnitId() != null) {
-            B2BUnitModel b2bUnit = new B2BUnitModel();
-            b2bUnit.setId(dto.getB2bUnitId());
-            model.setB2bUnit(b2bUnit);
-        }
-
+        model.setB2bUnit(b2bUnit);
         AcademicModel saved = academicRepository.save(model);
         return academicPopulator.toDTO(saved);
     }

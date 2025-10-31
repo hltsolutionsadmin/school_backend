@@ -18,9 +18,9 @@ public enum ErrorCode {
     INVALID_TICKET_TYPE(2002, "Invalid ticket type", HttpStatus.BAD_REQUEST),
     INVALID_TICKET_STATUS(2003, "Invalid ticket status", HttpStatus.BAD_REQUEST),
     INVALID_REQUEST(2004, "Invalid request data", HttpStatus.BAD_REQUEST),
+    ACADEMIC_NOT_FOUND(3001, "Academic not found", HttpStatus.NOT_FOUND),
 
     INVALID_BUSINESS_TYPE(1003, "Invalid Business Type code", HttpStatus.BAD_REQUEST),
-    ACADEMIC_NOT_FOUND(2001, "Academic unit not found", HttpStatus.NOT_FOUND),
     TASK_NOT_FOUND(3001, "Task not found", HttpStatus.NOT_FOUND),
     EVENT_NOT_FOUND(2001, "Academic event not found", HttpStatus.NOT_FOUND),
     EMAIL_ALREADY_IN_USE(1002, "Email Is Already In Use", HttpStatus.CONFLICT),

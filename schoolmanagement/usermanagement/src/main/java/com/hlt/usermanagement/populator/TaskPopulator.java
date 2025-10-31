@@ -6,7 +6,10 @@ import com.hlt.usermanagement.model.AcademicModel;
 import com.hlt.usermanagement.model.UserModel;
 import com.hlt.usermanagement.repository.AcademicRepository;
 import com.hlt.usermanagement.services.UserService;
+import com.schoolmanagement.auth.exception.handling.ErrorCode;
+import com.schoolmanagement.auth.exception.handling.HltCustomerException;
 import com.schoolmanagement.utils.Populator;
+import com.schoolmanagement.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -44,16 +47,20 @@ public class TaskPopulator implements Populator<TaskModel, TaskDTO> {
 
     public TaskModel toModel(TaskDTO dto) {
         if (dto == null) return null;
+        AcademicModel academic = academicRepository.findById(dto.getAcademicId())
+                .orElseThrow(() -> new HltCustomerException(ErrorCode.ACADEMIC_NOT_FOUND));
 
-        Optional<AcademicModel> academic = academicRepository.findById(dto.getAcademicId());
-        UserModel initiatedBy = userService.findById(dto.getInitiatedById());
+        UserModel initiatedBy = userService.findById(SecurityUtils.getCurrentUserDetails().getId());
+        if (initiatedBy == null) {
+            throw new HltCustomerException(ErrorCode.USER_NOT_FOUND);
+        }
 
         return TaskModel.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .taskType(dto.getTaskType())
-                .academic(academic.get())
+                .academic(academic)
                 .initiatedBy(initiatedBy)
                 .dueDate(dto.getDueDate())
                 .active(dto.getActive())

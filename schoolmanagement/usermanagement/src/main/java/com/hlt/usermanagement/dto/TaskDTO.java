@@ -28,7 +28,6 @@ public class TaskDTO {
     @NotNull(message = "Academic ID is required")
     private Long academicId;
 
-    @NotNull(message = "Initiated by User ID is required")
     private Long initiatedById;
 
     @FutureOrPresent(message = "Due date must not be in the past")

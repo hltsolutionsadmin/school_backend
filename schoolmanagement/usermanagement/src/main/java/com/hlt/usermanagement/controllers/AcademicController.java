@@ -5,6 +5,7 @@ import com.hlt.usermanagement.dto.AcademicUserDTO;
 import com.hlt.usermanagement.dto.AssignUserDTO;
 import com.hlt.usermanagement.services.AcademicService;
 import com.schoolmanagement.commonservice.dto.StandardResponse;
+import com.schoolmanagement.utils.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,6 +55,16 @@ public class AcademicController {
         Pageable pageable = PageRequest.of(page, size);
         Page<AcademicUserDTO> users = academicService.getUsersInAcademic(academicId, pageable);
         return StandardResponse.page("Users in academic retrieved successfully", users);
+    }
+
+    @GetMapping("/userAcademics")
+    public StandardResponse<Page<AcademicDTO>> getAcademicsByUser(
+
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return StandardResponse.page("Academics fetched successfully",
+                academicService.getAcademicsByUserId(SecurityUtils.getCurrentUserDetails().getId(), page, size));
     }
 
 }

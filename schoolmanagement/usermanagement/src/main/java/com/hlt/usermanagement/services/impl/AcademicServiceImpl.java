@@ -116,5 +116,17 @@ public class AcademicServiceImpl implements AcademicService {
     }
 
 
+    @Override
+    public Page<AcademicDTO> getAcademicsByUserId(Long userId, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<AcademicModel> academicsPage = academicUserMappingRepository.findAllAcademicsByUserId(userId, pageable);
+
+        if (academicsPage.isEmpty()) {
+            throw new HltCustomerException(ErrorCode.BUSINESS_NOT_FOUND, "No academics found for user");
+        }
+
+        return academicsPage.map(academicPopulator::toDTO);
+    }
+
 
 }

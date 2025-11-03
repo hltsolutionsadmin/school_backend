@@ -16,4 +16,6 @@ public interface AcademicService {
 
    Page<AcademicUserDTO> getUsersInAcademic(Long academicId, Pageable pageable);
 
+    Page<AcademicDTO> getAcademicsByUserId(Long userId, int page, int size);
+
 }

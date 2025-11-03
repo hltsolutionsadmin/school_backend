@@ -24,5 +24,5 @@ public interface AcademicUserMappingRepository extends JpaRepository<AcademicUse
     Page<AcademicUserMapping> findByAcademic(AcademicModel academic, Pageable pageable);
 
     @Query("SELECT aum.academic FROM AcademicUserMapping aum WHERE aum.user.id = :userId")
-    List<AcademicModel> findAllAcademicsByUserId(@Param("userId") Long userId);
+    Page<AcademicModel> findAllAcademicsByUserId(@Param("userId") Long userId, Pageable pageable);
 }

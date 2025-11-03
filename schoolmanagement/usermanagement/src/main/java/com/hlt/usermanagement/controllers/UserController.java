@@ -115,6 +115,18 @@ public class UserController {
         loggedInUser.setId(user.getId());
         loggedInUser.setFullName(user.getFullName());
         loggedInUser.setPrimaryContact(user.getPrimaryContact());
+        loggedInUser.setEmail(user.getEmail());
+
+        // include roles
+        java.util.Set<String> roles = user.getRoles().stream()
+                .map(r -> r.getName().name())
+                .collect(java.util.stream.Collectors.toSet());
+        loggedInUser.setRoles(roles);
+
+        // include businessId when available
+        if (user.getB2bUnit() != null) {
+            loggedInUser.setBusinessId(user.getB2bUnit().getId());
+        }
         return StandardResponse.single("User fetched successfully", loggedInUser);
     }
 

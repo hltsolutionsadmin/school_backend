@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +96,38 @@ public class TicketServiceImpl implements TicketService {
         TicketModel model = ticketRepository.findById(id)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.TICKET_NOT_FOUND));
         ticketRepository.delete(model);
+    }
+
+    @Override
+    public List<TicketDTO> getTicketsByAcademic(Long academicId, String status, String type) {
+        if (academicId == null) {
+            throw new HltCustomerException(ErrorCode.INVALID_REQUEST);
+        }
+
+        TicketStatus statusEnum = null;
+        TicketType typeEnum = null;
+
+        if (status != null && !status.isBlank()) {
+            statusEnum = TicketStatus.valueOf(status.toUpperCase());
+        }
+        if (type != null && !type.isBlank()) {
+            typeEnum = TicketType.valueOf(type.toUpperCase());
+        }
+
+        List<TicketModel> models;
+        if (statusEnum != null && typeEnum != null) {
+            models = ticketRepository.findByAcademic_IdAndStatusAndType(academicId, statusEnum, typeEnum);
+        } else if (statusEnum != null) {
+            models = ticketRepository.findByAcademic_IdAndStatus(academicId, statusEnum);
+        } else if (typeEnum != null) {
+            models = ticketRepository.findByAcademic_IdAndType(academicId, typeEnum);
+        } else {
+            models = ticketRepository.findByAcademic_Id(academicId);
+        }
+
+        return models.stream()
+                .map(ticketPopulator::toDTO)
+                .collect(Collectors.toList());
     }
 
     private void populateModelFromDTO(TicketDTO dto, TicketModel model) {

@@ -10,6 +10,7 @@ import com.schoolmanagement.auth.exception.handling.HltCustomerException;
 import com.schoolmanagement.commonservice.dto.BasicOnboardUserDTO;
 import com.schoolmanagement.commonservice.dto.MediaDTO;
 import com.schoolmanagement.commonservice.dto.UserDTO;
+import com.schoolmanagement.commonservice.dto.B2BUnitDTO;
 import com.schoolmanagement.commonservice.enums.ERole;
 import com.schoolmanagement.commonservice.user.UserDetailsImpl;
 import com.hlt.usermanagement.dto.UserUpdateDTO;
@@ -244,7 +245,7 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
 
 
 
-        return UserDTO.builder()
+        UserDTO dto = UserDTO.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .primaryContact(user.getPrimaryContact())
@@ -257,6 +258,15 @@ public class UserServiceImpl implements UserService, UserServiceAdapter {
                 .password(user.getPassword())
                 .profileCompleted(user.getProfileCompleted())
                 .build();
+
+        if (user.getB2bUnit() != null) {
+            dto.setSchoolId(user.getB2bUnit().getId());
+            B2BUnitDTO b2bDto = new B2BUnitDTO();
+            b2bDto.setId(user.getB2bUnit().getId());
+            dto.setB2bUnit(b2bDto);
+        }
+
+        return dto;
     }
 
 

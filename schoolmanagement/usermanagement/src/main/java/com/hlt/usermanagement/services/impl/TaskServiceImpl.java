@@ -73,6 +73,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Page<TaskDTO> getTasksByTeacherId(Long teacherId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<TaskModel> taskPage = taskRepository.findByInitiatedBy_Id(teacherId, pageable);
+        
+        return new PageImpl<>(
+                taskPage.getContent().stream().map(taskPopulator::toDTO).collect(Collectors.toList()),
+                pageable,
+                taskPage.getTotalElements()
+        );
+    }
+
+    @Override
     public void deleteTask(Long id) {
         TaskModel existing = taskRepository.findById(id)
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.TASK_NOT_FOUND));

@@ -21,9 +21,9 @@ public class TaskController {
         return StandardResponse.single("Task created successfully", taskService.createTask(dto));
     }
 
-    @PutMapping("/{id}")
-    public StandardResponse<TaskDTO> updateTask(@PathVariable Long id, @RequestBody @Valid TaskDTO dto) {
-        return StandardResponse.single("Task updated successfully", taskService.updateTask(id, dto));
+    @PutMapping
+    public StandardResponse<TaskDTO> updateTask( @RequestBody @Valid TaskDTO dto) {
+        return StandardResponse.single("Task updated successfully", taskService.updateTask(dto.getId(), dto));
     }
 
     @GetMapping("/{id}")
@@ -38,6 +38,14 @@ public class TaskController {
             @RequestParam(required = false) TaskType type) {
 
         return StandardResponse.page("Tasks fetched successfully", taskService.getAllTasks(page, size, type));
+    }
+
+    @GetMapping("/user/{userId}")
+    public StandardResponse<Page<TaskDTO>> getTasksByusersId(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return StandardResponse.page("Tasks fetched successfully", taskService.getTasksByTeacherId(userId, page, size));
     }
 
     @DeleteMapping("/{id}")

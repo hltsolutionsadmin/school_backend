@@ -13,5 +13,7 @@ public interface TaskService {
 
     Page<TaskDTO> getAllTasks(int page, int size, TaskType type);
 
+    Page<TaskDTO> getTasksByTeacherId(Long teacherId, int page, int size);
+
     void deleteTask(Long id);
 }

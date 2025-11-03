@@ -28,6 +28,7 @@ public class AcademicUserMapping {
     @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
 
+    //TODO ::Change to EROLES -enums
     @Column(name = "role", nullable = false)
     private String role;
 }

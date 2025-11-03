@@ -18,4 +18,16 @@ public interface TicketRepository extends JpaRepository<TicketModel, Long>,
 
     Page<TicketModel> findByTypeAndStatus(TicketType type, TicketStatus status, Pageable pageable);
 
+    // Fetch by academic id (no pagination)
+    java.util.List<TicketModel> findByAcademic_Id(Long academicId);
+
+    // Fetch by academic id and status
+    java.util.List<TicketModel> findByAcademic_IdAndStatus(Long academicId, TicketStatus status);
+
+    // Fetch by academic id and type
+    java.util.List<TicketModel> findByAcademic_IdAndType(Long academicId, TicketType type);
+
+    // Fetch by academic id, status and type
+    java.util.List<TicketModel> findByAcademic_IdAndStatusAndType(Long academicId, TicketStatus status, TicketType type);
+
 }

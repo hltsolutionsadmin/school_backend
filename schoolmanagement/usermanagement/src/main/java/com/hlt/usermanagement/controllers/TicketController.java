@@ -47,6 +47,17 @@ public class TicketController {
         return StandardResponse.page("Tickets fetched successfully", page);
     }
 
+    @GetMapping("/by-academic/{academicId}")
+    public StandardResponse<java.util.List<TicketDTO>> getByAcademic(
+            @PathVariable Long academicId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String type) {
+        return StandardResponse.list(
+                "Tickets fetched successfully",
+                ticketService.getTicketsByAcademic(academicId, status, type)
+        );
+    }
+
     @DeleteMapping("/{id}")
     public StandardResponse<Void> delete(@PathVariable Long id) {
         ticketService.delete(id);

@@ -37,9 +37,11 @@ import com.hlt.usermanagement.services.UserService;
 import com.hlt.usermanagement.services.impl.UserDetailsServiceImpl;
 import com.schoolmanagement.utils.SRBaseEndpoint;
 
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 @RequestMapping("/auth")
@@ -57,6 +59,9 @@ public class AuthController extends SRBaseEndpoint {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<Object> generateJwt(@Valid @RequestBody LoginRequest loginRequest) throws JsonProcessingException {
@@ -113,7 +118,7 @@ public class AuthController extends SRBaseEndpoint {
 
         UserModel newUser = new UserModel();
         newUser.setUsername(request.getUsername());
-        newUser.setPassword(request.getPassword());
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setFullName(request.getFullName());
         newUser.setEmail(request.getEmail());
         newUser.setEmailHash(DigestUtils.sha256Hex(request.getEmail().trim().toLowerCase()));
@@ -125,6 +130,7 @@ public class AuthController extends SRBaseEndpoint {
 
         return ResponseEntity.ok(StandardResponse.message("User registered successfully"));
     }
+
 
     private Set<RoleModel> fetchRoles(Set<ERole> roles) {
         Set<RoleModel> assignedRoles = roleRepository.findByNameIn(roles);
@@ -140,7 +146,7 @@ public class AuthController extends SRBaseEndpoint {
         UserModel user = userService.findByUsername(request.getUsername())
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND));
 
-        if (!request.getPassword().equals(user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
 
@@ -148,6 +154,7 @@ public class AuthController extends SRBaseEndpoint {
 
         return ResponseEntity.ok(generateJwtResponse(user));
     }
+
 
 
     @PostMapping("/refreshToken")
@@ -162,14 +169,16 @@ public class AuthController extends SRBaseEndpoint {
 
             String newAccessToken = jwtUtils.generateJwtToken(loggedInUser);
 
-            return ResponseEntity.ok(new JwtResponse(
+            JwtResponse response = new JwtResponse(
                     newAccessToken,
                     loggedInUser.getId(),
                     loggedInUser.getPrimaryContact(),
                     loggedInUser.getEmail(),
                     new ArrayList<>(loggedInUser.getRoles()),
                     refreshToken
-            ));
+            );
+            response.setBusinessId(loggedInUser.getBusinessId());
+            return ResponseEntity.ok(response);
         }
 
         throw new HltCustomerException(ErrorCode.TOKEN_PROCESSING_ERROR);
@@ -216,7 +225,7 @@ public class AuthController extends SRBaseEndpoint {
             String jwt = jwtUtils.generateJwtToken(loggedInUser);
             String refreshToken = jwtUtils.generateRefreshToken(loggedInUser);
 
-            return new JwtResponse(
+            JwtResponse response = new JwtResponse(
                     jwt,
                     loggedInUser.getId(),
                     loggedInUser.getPrimaryContact(),
@@ -224,6 +233,8 @@ public class AuthController extends SRBaseEndpoint {
                     new ArrayList<>(loggedInUser.getRoles()),
                     refreshToken
                     );
+            response.setBusinessId(loggedInUser.getBusinessId());
+            return response;
         } finally {
             userOTPService.deleteByPrimaryContactAndOtpType(userModel.getPrimaryContact(), SIGN_IN);
             log.info("Deleted OTP for contact: {}", userModel.getPrimaryContact());
@@ -241,6 +252,10 @@ public class AuthController extends SRBaseEndpoint {
                 .map(role -> role.getName().name())
                 .collect(Collectors.toSet());
         user.setRoles(roles);
+
+        if (userModel.getB2bUnit() != null) {
+            user.setBusinessId(userModel.getB2bUnit().getId());
+        }
 
         return user;
     }

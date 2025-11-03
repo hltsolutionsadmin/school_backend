@@ -3,6 +3,7 @@ package com.hlt.usermanagement.services;
 import com.hlt.usermanagement.dto.TicketDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 public interface TicketService {
 
@@ -19,4 +20,6 @@ public interface TicketService {
                            Long b2bUnitId,
                            Pageable pageable);
     void delete(Long id);
+
+    List<TicketDTO> getTicketsByAcademic(Long academicId, String status, String type);
 }

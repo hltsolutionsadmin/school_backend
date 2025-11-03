@@ -18,6 +18,7 @@ public class JwtResponse {
     private String email;
     private List<String> roles;
     private String primaryContact;
+    private Long businessId;
 
     public JwtResponse(String accessToken, Long id, String primaryContact, String email, List<String> roles,
                        String refreshToken ) {

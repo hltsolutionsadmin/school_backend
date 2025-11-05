@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+
 @Repository
 public interface TaskRepository extends JpaRepository<TaskModel, Long> {
 
@@ -17,4 +19,11 @@ public interface TaskRepository extends JpaRepository<TaskModel, Long> {
 
 
     Page<TaskModel> findByInitiatedBy_Id(Long initiatedById, Pageable pageable);
+
+    Page<TaskModel> findByAcademic_IdAndTaskDateOrderByCreatedAtDesc(
+            Long academicId, LocalDate taskDate, Pageable pageable
+    );
+    Page<TaskModel> findByAcademic_IdOrderByCreatedAtDesc(
+            Long academicId, Pageable pageable
+    );
 }

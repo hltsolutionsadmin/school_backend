@@ -7,7 +7,10 @@ import com.schoolmanagement.commonservice.dto.StandardResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -52,5 +55,15 @@ public class TaskController {
     public StandardResponse<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return StandardResponse.message("Task deleted successfully");
+    }
+
+    @GetMapping("/by_academic")
+    public StandardResponse<Page<TaskDTO>> getTasks(
+            Pageable pageable,
+            @RequestParam Long academicId,
+            @RequestParam(required = false) LocalDate taskDate
+    ) {
+        Page<TaskDTO> tasks = taskService.getTasks(pageable, academicId, taskDate);
+        return StandardResponse.page("Tasks fetched successfully", tasks);
     }
 }

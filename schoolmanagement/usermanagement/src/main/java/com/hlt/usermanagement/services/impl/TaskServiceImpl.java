@@ -13,6 +13,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,4 +92,27 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.TASK_NOT_FOUND));
         taskRepository.delete(existing);
     }
+
+    @Override
+    public Page<TaskDTO> getTasks(Pageable pageable, Long academicId, LocalDate taskDate) {
+
+        Page<TaskModel> result;
+
+        if (taskDate != null) {
+            result = taskRepository.findByAcademic_IdAndTaskDateOrderByCreatedAtDesc(
+                    academicId, taskDate, pageable
+            );
+        } else {
+            result = taskRepository.findByAcademic_IdOrderByCreatedAtDesc(
+                    academicId, pageable
+            );
+        }
+
+        List<TaskDTO> dtoList = result.getContent().stream()
+                .map(taskPopulator::toDTO)
+                .toList();
+
+        return new PageImpl<>(dtoList, pageable, result.getTotalElements());
+    }
+
 }

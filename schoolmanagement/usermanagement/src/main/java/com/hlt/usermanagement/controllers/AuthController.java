@@ -59,9 +59,7 @@ public class AuthController extends SRBaseEndpoint {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-
-
+//    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<Object> generateJwt(@Valid @RequestBody LoginRequest loginRequest) throws JsonProcessingException {
@@ -118,7 +116,7 @@ public class AuthController extends SRBaseEndpoint {
 
         UserModel newUser = new UserModel();
         newUser.setUsername(request.getUsername());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setPassword((request.getPassword()));
         newUser.setFullName(request.getFullName());
         newUser.setEmail(request.getEmail());
         newUser.setEmailHash(DigestUtils.sha256Hex(request.getEmail().trim().toLowerCase()));
@@ -146,7 +144,7 @@ public class AuthController extends SRBaseEndpoint {
         UserModel user = userService.findByUsername(request.getUsername())
                 .orElseThrow(() -> new HltCustomerException(ErrorCode.USER_NOT_FOUND));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!request.getPassword().equals(user.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
 

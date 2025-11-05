@@ -36,6 +36,7 @@ public class TaskPopulator implements Populator<TaskModel, TaskDTO> {
         target.setActive(source.getActive());
         target.setAttachmentUrl(source.getAttachmentUrl());
         target.setPriority(source.getPriority());
+        target.setTaskDate(source.getTaskDate());
     }
 
     public TaskDTO toDTO(TaskModel model) {
@@ -65,6 +66,7 @@ public class TaskPopulator implements Populator<TaskModel, TaskDTO> {
                 .dueDate(dto.getDueDate())
                 .active(dto.getActive())
                 .attachmentUrl(dto.getAttachmentUrl())
+                .taskDate(dto.getTaskDate())
                 .priority(dto.getPriority())
                 .build();
     }

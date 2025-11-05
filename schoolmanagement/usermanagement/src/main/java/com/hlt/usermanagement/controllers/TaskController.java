@@ -37,7 +37,7 @@ public class TaskController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) TaskType type) {
 
-        return StandardResponse.page("Tasks fetched successfully", taskService.getAllTasks(page, size, type));
+        return StandardResponse.page("Tasks fe  tched successfully", taskService.getAllTasks(page, size, type));
     }
 
     @GetMapping("/user/{userId}")

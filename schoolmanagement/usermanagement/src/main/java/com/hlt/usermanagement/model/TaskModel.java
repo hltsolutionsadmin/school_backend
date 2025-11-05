@@ -47,4 +47,7 @@ public class TaskModel extends AuditableModel {
 
     @Column(name = "PRIORITY")
     private Integer priority;
+
+    @Column(name = "TASK_DATE", nullable = false)
+    private LocalDate taskDate;
 }

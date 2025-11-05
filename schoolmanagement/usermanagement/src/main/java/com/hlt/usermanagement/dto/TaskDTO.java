@@ -37,5 +37,7 @@ public class TaskDTO {
 
     private String attachmentUrl;
 
+    private LocalDate taskDate;
+
     private Integer priority;
 }
